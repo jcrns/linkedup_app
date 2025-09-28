@@ -1,0 +1,15 @@
+.dart_tool/
+.packages
+build/
+.idea/
+.vscode/
+/ios/.symlinks/
+/ios/Flutter/Generated.xcconfig
+/ios/Runner.xcodeproj/project.pbxproj
+/ios/Runner.xcworkspace/
+/ios/.generated_compilation_targets
+/macos/.symlinks/
+/macos/Flutter/Generated.xcconfig
+/macos/Runner.xcodeproj/project.pbxproj
+/macos/Runner.xcworkspace/
+/macos/.generated_compilation_targets
