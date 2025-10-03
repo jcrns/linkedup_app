@@ -41,5 +41,6 @@ flutter:
 
   assets:
     - images/roomFinding/
+    - images/sneakerShopping/
     - images/app/
     - images/app/placeholder.png

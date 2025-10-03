@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:room_finder_flutter/components/RFCommonAppComponent.dart';
 import 'package:room_finder_flutter/main.dart';
-import 'package:room_finder_flutter/screens/RFEmailSignInScreen.dart';
+import 'package:room_finder_flutter/screens/RFSignInScreen.dart';
 import 'package:room_finder_flutter/screens/RFResetPasswordScreen.dart';
 import 'package:room_finder_flutter/screens/RFSignUpScreen.dart';
 import 'package:room_finder_flutter/utils/RFColors.dart';
@@ -85,7 +85,7 @@ class _RFMobileSignInState extends State<RFMobileSignIn> {
                 width: context.width(),
                 elevation: 0,
                 onTap: () {
-                  RFEmailSignInScreen().launch(context);
+                  RFSignInScreen().launch(context);
                 },
               ),
               Align(

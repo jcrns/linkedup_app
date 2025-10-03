@@ -22,7 +22,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   late TextEditingController _dobController;
   late TextEditingController _languageController;
   String? _profileImage;
-  static const String _baseUrl = 'http://127.0.0.1:8000';
+  static const String _baseUrl = 'http://127.0.0.1:5000';
 
   @override
   void initState() {

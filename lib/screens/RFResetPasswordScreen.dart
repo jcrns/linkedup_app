@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
-import 'package:room_finder_flutter/screens/RFEmailSignInScreen.dart';
+import 'package:room_finder_flutter/screens/RFSignInScreen.dart';
 import 'package:room_finder_flutter/utils/RFColors.dart';
 import 'package:room_finder_flutter/utils/RFWidget.dart';
 
@@ -56,7 +56,7 @@ class _RFResetPasswordScreenState extends State<RFResetPasswordScreen> {
             width: context.width(),
             elevation: 0,
             onTap: () {
-              RFEmailSignInScreen().launch(context);
+              RFSignInScreen().launch(context);
             },
           ),
         ],

@@ -50,13 +50,14 @@ class _BusinessApplicationScreenState extends State<BusinessApplicationScreen> {
     if (_formKey.currentState!.validate()) {
       setState(() => _isLoading = true);
       
-      final uri = Uri.parse('http://127.0.0.1:8000/api/businesses');
+      final uri = Uri.parse('http://127.0.0.1:5000/api/businesses/');
       final token = getStringAsync('auth_token', defaultValue: '');
       
       var request = http.MultipartRequest('POST', uri);
       request.headers['Authorization'] = 'Token $token';
+      request.headers['Content-Type'] = 'multipart/form-data';
       
-      // Add text fields
+      // Add text fields - REMOVE 'owner' field as it's read-only
       request.fields.addAll({
         'name': _nameController.text,
         'business_type': _typeController.text,
@@ -64,38 +65,39 @@ class _BusinessApplicationScreenState extends State<BusinessApplicationScreen> {
         'description': _descriptionController.text,
         'contact_info': _contactController.text,
         'target_audience': _audienceController.text,
-        'website': _websiteController.text,
-        'social_media': _socialController.text,
+        'website': _websiteController.text ?? '', // handle null
+        'social_media': _socialController.text ?? '', // handle null
         'deals': _dealsController.text,
         'business_hours': _hoursController.text,
+        'total_investment': '0', // default value
+        'monthly_growth_rate': '0.05', // default value
       });
       
-      // Add image files
+      // Add image files with CORRECT field names
       if (_imageFile != null) {
-        final mimeType = lookupMimeType(_imageFile!.path)?.split('/');
         request.files.add(await http.MultipartFile.fromPath(
-          'image',
+          'image', // CORRECTED: matches model field name
           _imageFile!.path,
-          contentType: MediaType(mimeType![0], mimeType[1]),
         ));
       }
       
       if (_logoFile != null) {
-        final mimeType = lookupMimeType(_logoFile!.path)?.split('/');
         request.files.add(await http.MultipartFile.fromPath(
-          'logo',
+          'logo', // CORRECTED: matches model field name
           _logoFile!.path,
-          contentType: MediaType(mimeType![0], mimeType[1]),
         ));
       }
       
       try {
         final response = await request.send();
+        final responseBody = await response.stream.bytesToString(); // ADD THIS
+        
         if (response.statusCode == 201) {
           toast('Business created successfully!');
           finish(context);
         } else {
-          toast('Error: ${response.reasonPhrase}');
+          print('Error response: $responseBody'); // DEBUGGING
+          toast('Error: ${response.reasonPhrase}. Details: $responseBody');
         }
       } catch (e) {
         toast('Error: $e');
@@ -104,7 +106,6 @@ class _BusinessApplicationScreenState extends State<BusinessApplicationScreen> {
       }
     }
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

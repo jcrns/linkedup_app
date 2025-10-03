@@ -6,7 +6,7 @@ import 'package:room_finder_flutter/main.dart';
 import 'package:room_finder_flutter/models/RoomFinderModel.dart';
 import 'package:room_finder_flutter/screens/CoinPage.dart';
 import 'package:room_finder_flutter/screens/EditProfileScreen.dart';
-import 'package:room_finder_flutter/screens/RFEmailSignInScreen.dart';
+import 'package:room_finder_flutter/screens/RFSignInScreen.dart';
 import 'package:room_finder_flutter/utils/RFColors.dart';
 import 'package:room_finder_flutter/utils/RFDataGenerator.dart';
 import 'package:room_finder_flutter/utils/RFImages.dart';
@@ -22,7 +22,7 @@ class ProfileFragment extends StatefulWidget {
 
 class _ProfileFragmentState extends State<ProfileFragment> {
   final List<RoomFinderModel> settingData = settingList();
-  static const String _baseUrl = 'http://127.0.0.1:8000';
+  static const String _baseUrl = 'http://127.0.0.1:5000';
   Map<String, dynamic>? userProfile;
   Map<String, int>? coinBalances;
   bool isLoading = true;
@@ -204,14 +204,14 @@ class _ProfileFragmentState extends State<ProfileFragment> {
                               dialogType: DialogType.CONFIRMATION,
                               onCancel: (v) => finish(context),
                               onAccept: (v) async{
-                                // RFEmailSignInScreen().launch(v).then((value) => finish(context));
+                                // RFSignInScreen().launch(v).then((value) => finish(context));
                                 // Navigator.pop(context);
                                 
                                 final userService = UserService();
                                 await userService.resetAuthToken();
                                 Navigator.pushAndRemoveUntil(
                                   context,
-                                  MaterialPageRoute(builder: (context) => RFEmailSignInScreen()),
+                                  MaterialPageRoute(builder: (context) => RFSignInScreen()),
                                   (route) => false,
                                 );
                               },

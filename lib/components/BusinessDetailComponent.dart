@@ -5,11 +5,11 @@ import 'package:room_finder_flutter/screens/BusinessDescriptionScreen.dart';
 import 'package:room_finder_flutter/utils/RFColors.dart';
 import 'package:room_finder_flutter/utils/RFWidget.dart';
 
-class BusinessListComponent extends StatelessWidget {
+class BusinessDetailComponent extends StatelessWidget {
   final Business? businessListData;
   final bool? showHeight;
 
-  BusinessListComponent({this.businessListData, this.showHeight});
+  BusinessDetailComponent({this.businessListData, this.showHeight});
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +69,7 @@ class BusinessListComponent extends StatelessWidget {
         ],
       ),
     ).onTap(() {
-      RFBusinessDescriptionScreen(businessData: businessListData).launch(context);
+      BusinessDescriptionScreen(businessData: businessListData!).launch(context);
     }, splashColor: Colors.transparent, hoverColor: Colors.transparent, highlightColor: Colors.transparent);
   }
 }

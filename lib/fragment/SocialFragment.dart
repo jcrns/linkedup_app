@@ -1,3 +1,6 @@
+// 1. Import the shared_preferences package
+import 'package:shared_preferences/shared_preferences.dart';
+
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -13,17 +16,25 @@ class SocialFragment extends StatefulWidget {
 }
 
 class _SocialFragmentState extends State<SocialFragment> {
-  static const String url = 'http://127.0.0.1:8000';
+  // --- UNCHANGED CODE ---
+  static const String url = 'http://127.0.0.1:5000';
   static const String apiUrl = '$url/api/social-posts/';
   static const String likeUrl = '$url/like/';
   final TextEditingController _postController = TextEditingController();
   String get bearerToken => 'Bearer $token';
   bool _isLoading = false;
   List<dynamic> _posts = [];
-  Map<int, bool> _expandedPosts = {}; // Track which posts show replies
-  Map<int, bool> _expandedComments = {}; // Track which comments show replies
-  int? _replyingToPostId; // Track which post we're replying to
-  String _replyingToUsername = ''; // Track username we're replying to
+  Map<int, bool> _expandedPosts = {};
+  Map<int, bool> _expandedComments = {};
+  int? _replyingToPostId;
+  String _replyingToUsername = '';
+  // --- END UNCHANGED CODE ---
+
+  // 2. REMOVE the old state variable. It is no longer needed.
+  // bool _dialogAccepted = false; 
+
+  // 3. DEFINE a constant key for SharedPreferences for safety and consistency.
+  static const String _dialogAcceptedKey = 'social_dialog_accepted';
 
   late String token;
   final FocusNode _postFocusNode = FocusNode();
@@ -33,6 +44,74 @@ class _SocialFragmentState extends State<SocialFragment> {
     super.initState();
     token = getStringAsync('auth_token', defaultValue: 'a7d8d4bd1b1eb3de13886c9c3b075ea891b21e82');
     fetchPosts();
+    
+    // 4. CHECK if the dialog needs to be shown after the first frame is built.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _checkAndShowDialog();
+    });
+  }
+
+  // 5. CREATE a new method to handle checking the preference and showing the dialog.
+  Future<void> _checkAndShowDialog() async {
+    final prefs = await SharedPreferences.getInstance();
+    // Get the boolean value. If it doesn't exist, default to 'false'.
+    final bool hasAccepted = prefs.getBool(_dialogAcceptedKey) ?? false;
+
+    // If the user has NOT accepted, show the dialog.
+    // The 'mounted' check is a good practice in async methods.
+    if (!hasAccepted && mounted) {
+      _showGuidelinesDialog();
+    }
+  }
+
+  // 6. RENAME the dialog method for clarity (optional but good practice).
+  Future<void> _showGuidelinesDialog() async {
+    return showDialog(
+      context: context,
+      // Prevents closing the dialog by tapping outside of it
+      barrierDismissible: false, 
+      builder: (_) {
+        return AlertDialog(
+          backgroundColor: Colors.transparent,
+          content: Container(
+            // Removed fixed height to allow for dynamic sizing
+            // height: 300, 
+            width: 300,
+            child: Column(
+              mainAxisSize: MainAxisSize.min, // Makes the column fit its children
+              children: [
+                Container(
+                  padding: EdgeInsets.all(16),
+                  width: context.width(),
+                  color: context.cardColor,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("Forum Guidelines", style: boldTextStyle(size: 20)),
+                      SizedBox(height: 8),
+                      Text("1. Be respectful to others.\n2. No hate speech or bullying.\n3. No spam and be Professional.", style: secondaryTextStyle(size: 14)),
+                      SizedBox(height: 16),
+                      AppButton(
+                        textColor: Colors.black,
+                        text: 'I accept',
+                        onTap: () async {
+                          // 7. SAVE the acceptance state to SharedPreferences
+                          final prefs = await SharedPreferences.getInstance();
+                          await prefs.setBool(_dialogAcceptedKey, true);
+                          
+                          // Close the dialog
+                          finish(context);
+                        },
+                      )
+                    ]
+                  ),
+                )
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
 
   @override
@@ -40,8 +119,7 @@ class _SocialFragmentState extends State<SocialFragment> {
     _postFocusNode.dispose();
     super.dispose();
   }
-
-  // Add this new method to fetch child posts
+  
   Future<void> fetchChildPosts(int postId) async {
     try {
       final response = await http.get(
@@ -72,6 +150,7 @@ class _SocialFragmentState extends State<SocialFragment> {
   }
 
   Future<void> fetchPosts() async {
+    // ... fetchPosts method is unchanged
     setState(() => _isLoading = true);
     try {
       final response = await http.get(
@@ -161,7 +240,8 @@ class _SocialFragmentState extends State<SocialFragment> {
       print('Error liking post: $e');
     }
   }
-
+  
+  // All _build... methods and the final build method are unchanged...
   Widget _buildMedia(List<dynamic> media) {
     if (media.isEmpty) return SizedBox.shrink();
     
@@ -491,6 +571,7 @@ class _SocialFragmentState extends State<SocialFragment> {
                     ),
                   ),
           ),
+          // Add condition if profile not verified to hide this input area
           Padding(
             padding: const EdgeInsets.all(12),
             child: Row(

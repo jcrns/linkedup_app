@@ -19,9 +19,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   var _pages = [
     HomeFragment(),
-    // ExploreFragment(),
+    ExploreFragment(),
     EventsFragment(), // fixed typo here (EventsFragmentnt → EventsFragment)
-    SocialFragment(),
+    // SocialFragment(),
     ProfileFragment(),
   ];
 
@@ -39,21 +39,21 @@ class _HomeScreenState extends State<HomeScreen> {
           label: 'Home',
           activeIcon: Icon(Icons.home_outlined, color: rf_primaryColor, size: 22),
         ),
-        // BottomNavigationBarItem(
-        //   icon: rf_search.iconImage(),
-        //   label: 'Explore',
-        //   activeIcon: rf_search.iconImage(iconColor: rf_primaryColor, size: 22),
-        // ),
+        BottomNavigationBarItem(
+          icon: rf_search.iconImage(),
+          label: 'Explore',
+          activeIcon: rf_search.iconImage(iconColor: rf_primaryColor, size: 22),
+        ),
         BottomNavigationBarItem(
           icon: rf_setting.iconImage(size: 22),
           label: 'Events',
           activeIcon: rf_setting.iconImage(iconColor: rf_primaryColor),
         ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.people_alt_outlined, size: 22),
-          label: 'Forum',
-          activeIcon: Icon(Icons.people_alt, color: rf_primaryColor, size: 22),
-        ),
+        // BottomNavigationBarItem(
+        //   icon: Icon(Icons.people_alt_outlined, size: 22),
+        //   label: 'Forum',
+        //   activeIcon: Icon(Icons.people_alt, color: rf_primaryColor, size: 22),
+        // ),
         BottomNavigationBarItem(
           icon: rf_person.iconImage(),
           label: 'Account',

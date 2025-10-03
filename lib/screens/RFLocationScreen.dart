@@ -38,44 +38,19 @@ class _RFLocationScreenState extends State<RFLocationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: commonAppBarWidget(context, showLeadingIcon: false, appBarHeight: 50, title: "Search Detail", roundCornerShape: false),
+      appBar: AppBar(
+        elevation: 0,
+        centerTitle: true,
+        automaticallyImplyLeading: false,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.zero,
+          side: BorderSide(color: Color(0x00000000), width: 1),
+        ),
+      ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              padding: EdgeInsets.only(left: 24, right: 24, top: 24, bottom: 32),
-              decoration: boxDecorationWithRoundedCorners(
-                borderRadius: BorderRadius.only(bottomRight: Radius.circular(12), bottomLeft: Radius.circular(12)),
-                backgroundColor: rf_primaryColor,
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text("Search for Property", style: boldTextStyle(color: white)),
-                  16.height,
-                  AppTextField(
-                    controller: addressController,
-                    textFieldType: TextFieldType.OTHER,
-                    decoration: rfInputDecoration(
-                      showLableText: false,
-                      showPreFixIcon: true,
-                      prefixIcon: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(Icons.search, color: rf_primaryColor, size: 16),
-                          8.width,
-                          Text('Cleveland', style: boldTextStyle()),
-                          8.width,
-                          Container(width: 1, height: 15, color: appStore.isDarkModeOn ? white : gray.withOpacity(0.6)),
-                          16.width,
-                        ],
-                      ).paddingOnly(left: 16),
-                    ),
-                  )
-                ],
-              ),
-            ),
             Row(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,

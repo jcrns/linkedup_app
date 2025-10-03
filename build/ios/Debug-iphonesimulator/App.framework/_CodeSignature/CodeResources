@@ -10,11 +10,11 @@
 		</data>
 		<key>flutter_assets/AssetManifest.bin</key>
 		<data>
-		bMtCjSwhda/7VfKTW0zg3YSwNW8=
+		U/u8C57guu1Kc2fhsERDvAyH0HY=
 		</data>
 		<key>flutter_assets/AssetManifest.json</key>
 		<data>
-		mZUc3QIliB5QrOoem+Ra6RDs0Q0=
+		n4RNHTBc7XB8CPSXdR8aaFANLRE=
 		</data>
 		<key>flutter_assets/FontManifest.json</key>
 		<data>
@@ -168,13 +168,125 @@
 		<data>
 		8LmTEUx38ZPqG0RLfFRRzxGkPTc=
 		</data>
+		<key>flutter_assets/images/sneakerShopping/ic_MasterCard.png</key>
+		<data>
+		EL48GU8JoIbiqvVybXh3uEofnGg=
+		</data>
+		<key>flutter_assets/images/sneakerShopping/ic_arrivals_1.jpg</key>
+		<data>
+		mFDuL/eTt/3L2mog1di94gJ0ijg=
+		</data>
+		<key>flutter_assets/images/sneakerShopping/ic_arrivals_2.jpg</key>
+		<data>
+		z1P8S4KaR0T9mJEK6gvqAk7YAuo=
+		</data>
+		<key>flutter_assets/images/sneakerShopping/ic_arrivals_3.jpg</key>
+		<data>
+		tLWxCAvvbC2CCB+IhXMmvZxZwTs=
+		</data>
+		<key>flutter_assets/images/sneakerShopping/ic_arrivals_4.jpg</key>
+		<data>
+		S0nDqhtt75W8hrZ8IB0q2tFF8bE=
+		</data>
+		<key>flutter_assets/images/sneakerShopping/ic_arrivals_5.jpg</key>
+		<data>
+		ZqZIRjOGhYVplNKqllXfRaXEPRs=
+		</data>
+		<key>flutter_assets/images/sneakerShopping/ic_arrivals_6.jpg</key>
+		<data>
+		RbY8laVy+pyV9+wxGtXx5qyAHYI=
+		</data>
+		<key>flutter_assets/images/sneakerShopping/ic_arrivals_7.jpg</key>
+		<data>
+		gQh/QSwJjg6hYnz2oXjGwc3jilk=
+		</data>
+		<key>flutter_assets/images/sneakerShopping/ic_banner1.jpg</key>
+		<data>
+		M5YOAsnNvjhQYUTumaNikslgaD4=
+		</data>
+		<key>flutter_assets/images/sneakerShopping/ic_checkmark.png</key>
+		<data>
+		LLXQ7DPWoJu/z8od0EoQ0bHNu24=
+		</data>
+		<key>flutter_assets/images/sneakerShopping/ic_facebook.png</key>
+		<data>
+		5pPsctc/R+KQPOQTiRtFUjhO+fs=
+		</data>
+		<key>flutter_assets/images/sneakerShopping/ic_google.png</key>
+		<data>
+		QFKvPOz38UsOidpCZgiu3WKd3jg=
+		</data>
+		<key>flutter_assets/images/sneakerShopping/ic_payment.png</key>
+		<data>
+		vUJla8SR7lLR5P6ghhZ9qHPw914=
+		</data>
+		<key>flutter_assets/images/sneakerShopping/ic_paypal.png</key>
+		<data>
+		Do7pwtwrGDy2TUJ+eHnAjtUe5m0=
+		</data>
+		<key>flutter_assets/images/sneakerShopping/ic_shoes_1.png</key>
+		<data>
+		4icKFdZy050ui49ycY9haAAefhs=
+		</data>
+		<key>flutter_assets/images/sneakerShopping/ic_shoes_10.png</key>
+		<data>
+		/zzHehqW46PLBoTSVyPTQF6F41w=
+		</data>
+		<key>flutter_assets/images/sneakerShopping/ic_shoes_11.png</key>
+		<data>
+		9qzRrv7IsurJqDxlTTzvQPDGY2o=
+		</data>
+		<key>flutter_assets/images/sneakerShopping/ic_shoes_12.png</key>
+		<data>
+		1AFTLIceRBtHFwz+U388gtABq5g=
+		</data>
+		<key>flutter_assets/images/sneakerShopping/ic_shoes_2.png</key>
+		<data>
+		6+/3jNsnsK/j/2BBtyYZxFTDamY=
+		</data>
+		<key>flutter_assets/images/sneakerShopping/ic_shoes_3.png</key>
+		<data>
+		kAKfOVAm9nGEIU/d5JYb2vB4Y90=
+		</data>
+		<key>flutter_assets/images/sneakerShopping/ic_shoes_4.png</key>
+		<data>
+		z2trIRuJDspNE7ILezIM4Djl45Q=
+		</data>
+		<key>flutter_assets/images/sneakerShopping/ic_shoes_5.png</key>
+		<data>
+		Mi8Mfs3ZkpAOsYiI7/GNNxwMwao=
+		</data>
+		<key>flutter_assets/images/sneakerShopping/ic_shoes_6.png</key>
+		<data>
+		JsRap7yCzxQ1Khxc0ZYUsyu0dZY=
+		</data>
+		<key>flutter_assets/images/sneakerShopping/ic_shoes_7.png</key>
+		<data>
+		NlaV0K7+izaLSMk8u8YoUid7xWI=
+		</data>
+		<key>flutter_assets/images/sneakerShopping/ic_shoes_8.png</key>
+		<data>
+		I7VL5J0D0k6eLQ4NHL+hY4FyHb0=
+		</data>
+		<key>flutter_assets/images/sneakerShopping/ic_shoes_9.png</key>
+		<data>
+		swPCJgUCG+ELmxn0OsmyXT4l3dY=
+		</data>
+		<key>flutter_assets/images/sneakerShopping/ic_shopping.png</key>
+		<data>
+		dMBy9qI/KqE6WFwDNJaZ4frI4Rs=
+		</data>
+		<key>flutter_assets/images/sneakerShopping/ic_sneaker_logo.png</key>
+		<data>
+		Bm5Jt5Ubm1Vv/aENVCJY+BNe5A0=
+		</data>
 		<key>flutter_assets/isolate_snapshot_data</key>
 		<data>
 		jFlVxVvs0GUk3gpipcs+5qzuKEw=
 		</data>
 		<key>flutter_assets/kernel_blob.bin</key>
 		<data>
-		8wRkbrM0YXqw6D0/Z58aOe26CuQ=
+		2fiiHodnytkQpXnOp9i1UXJAMwg=
 		</data>
 		<key>flutter_assets/packages/fluttertoast/assets/toastify.css</key>
 		<data>
@@ -211,14 +323,14 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			iZoE8DH/JcHErTgLoetLIOjy0NAOfmme0+4D6+L1+oY=
+			TPBADInjnh0IhIOM0vfEG+2jKwIjMcH30xsfoMKeAQs=
 			</data>
 		</dict>
 		<key>flutter_assets/AssetManifest.json</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			pbcZIJluvoOp0TNrMW+qtL2ydvBQJ7RxndWAY3Ffn2Q=
+			86k970mL5Uw3Efl8xlfKcjStSKGcaGWC2PT3DsbNY9k=
 			</data>
 		</dict>
 		<key>flutter_assets/FontManifest.json</key>
@@ -480,6 +592,202 @@
 			K0EofYW7sOcC0deL/K7XQmfRDDlBxDg+52Eg9icAVCQ=
 			</data>
 		</dict>
+		<key>flutter_assets/images/sneakerShopping/ic_MasterCard.png</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			3clsp9FVDnsIk8kfIrv5B9EIeJGmGCmUiNPVK2x4m+Q=
+			</data>
+		</dict>
+		<key>flutter_assets/images/sneakerShopping/ic_arrivals_1.jpg</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			XFvQmnOgAOZDRWWbiyh7cZW1NC1DEPI7uPfss7dNOvg=
+			</data>
+		</dict>
+		<key>flutter_assets/images/sneakerShopping/ic_arrivals_2.jpg</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			UxgSiIEdj9wdhyvQo4a23nW7mf88LPDd/d1W+A6sBRk=
+			</data>
+		</dict>
+		<key>flutter_assets/images/sneakerShopping/ic_arrivals_3.jpg</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			tP0MhxSItTX9goNXqUaLesRBAE9PGlIvKZsmFcMq54s=
+			</data>
+		</dict>
+		<key>flutter_assets/images/sneakerShopping/ic_arrivals_4.jpg</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			K7h1WFLeqv+cD1++CVWHGoMCTdwjwpu88oOyDrzOCII=
+			</data>
+		</dict>
+		<key>flutter_assets/images/sneakerShopping/ic_arrivals_5.jpg</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			r3Onlko/nf2HE6shLIMljdvx9jrKqBDRv0IfvA6AbXY=
+			</data>
+		</dict>
+		<key>flutter_assets/images/sneakerShopping/ic_arrivals_6.jpg</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			6WRT0e+9eAOu1ZN1aJMH8L0uTzvC+KCdQDmvCTrd2k0=
+			</data>
+		</dict>
+		<key>flutter_assets/images/sneakerShopping/ic_arrivals_7.jpg</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			YjC1MmPR/pGI3Ni4SJF4QoAsnRDwnuWy1EJmceSpfVY=
+			</data>
+		</dict>
+		<key>flutter_assets/images/sneakerShopping/ic_banner1.jpg</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			OS6u3e8TfRNZ6R66aOHggM90NR4NsKfPxThO5FROAus=
+			</data>
+		</dict>
+		<key>flutter_assets/images/sneakerShopping/ic_checkmark.png</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			b6m2L19HGLFToXG82HNxHcIbLhE46028prf8vMEChek=
+			</data>
+		</dict>
+		<key>flutter_assets/images/sneakerShopping/ic_facebook.png</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			/GntM//rlXJWJ+pV5X7QKWr4cT8W7ToKuSU0Yx0rQRQ=
+			</data>
+		</dict>
+		<key>flutter_assets/images/sneakerShopping/ic_google.png</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			2v6wyp+BM+lfepZGA4rlW68n4+IAftrVU9f1mr37WHU=
+			</data>
+		</dict>
+		<key>flutter_assets/images/sneakerShopping/ic_payment.png</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			oK5UpZEosauUMI9OgZjZZzsSe2a4li+LneOWKGVdh6A=
+			</data>
+		</dict>
+		<key>flutter_assets/images/sneakerShopping/ic_paypal.png</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			4CJjMe0wmELpKEldzzUOzAEVCILojm+8f3u+gz3+Ea4=
+			</data>
+		</dict>
+		<key>flutter_assets/images/sneakerShopping/ic_shoes_1.png</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			kZ2oJvDukuU05IIDwMKwOFOFO+TBTCLlabj/l6UmbYE=
+			</data>
+		</dict>
+		<key>flutter_assets/images/sneakerShopping/ic_shoes_10.png</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			Nyb8UxaEYHaMZXgFZsT7vNa2xU9sJwPEhZAM2R10R3c=
+			</data>
+		</dict>
+		<key>flutter_assets/images/sneakerShopping/ic_shoes_11.png</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			5aZNTzwQPFUQDoahmG4ItwNd3tGj8MjwdYfdBzi0rso=
+			</data>
+		</dict>
+		<key>flutter_assets/images/sneakerShopping/ic_shoes_12.png</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			mL3dgt0y2CxwzPTCKpZY6HZmprynPi3obxzKEARxQXo=
+			</data>
+		</dict>
+		<key>flutter_assets/images/sneakerShopping/ic_shoes_2.png</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			eIUGq02oXaxnYT4rFKXeGdvNMUd1DiWNez+ZVcvTrmY=
+			</data>
+		</dict>
+		<key>flutter_assets/images/sneakerShopping/ic_shoes_3.png</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			Uco6psb8fWJmXOEiydFGbY8oIQUTeKwm0NaOAszIR+g=
+			</data>
+		</dict>
+		<key>flutter_assets/images/sneakerShopping/ic_shoes_4.png</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			V+Zq1YlHNmlW/jj5REG20DKBFyYsYusJPl+RAgDCQmA=
+			</data>
+		</dict>
+		<key>flutter_assets/images/sneakerShopping/ic_shoes_5.png</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			PKSzdSZlWwv96sySCz2Q2OMcALVXi3G6uTQTfOBHnAk=
+			</data>
+		</dict>
+		<key>flutter_assets/images/sneakerShopping/ic_shoes_6.png</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			o1KYZ30jTJzWfeEIpXXdyGArNDAw/Eb5N69djbwrqSE=
+			</data>
+		</dict>
+		<key>flutter_assets/images/sneakerShopping/ic_shoes_7.png</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			oNzjKDIdRXKDRVhHkRGd7TxGVzm2gN5ViGjbyNJdUX0=
+			</data>
+		</dict>
+		<key>flutter_assets/images/sneakerShopping/ic_shoes_8.png</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			VM5EOoAahb9QMlJJ9lYhf/JJUULbAPBx/cdiOJWsX+Y=
+			</data>
+		</dict>
+		<key>flutter_assets/images/sneakerShopping/ic_shoes_9.png</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			LNXUxH2BweUUYfFw6LOHHBWn9RUQp3q4rTwJY4yz8Lk=
+			</data>
+		</dict>
+		<key>flutter_assets/images/sneakerShopping/ic_shopping.png</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			/LAKvVneHTUGQQqKpvXHgWIGBUQBVYQuf9flSYehdeo=
+			</data>
+		</dict>
+		<key>flutter_assets/images/sneakerShopping/ic_sneaker_logo.png</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			KCGZ9OXzmqDz8oc2vz/k/MfYgmHiql2RI0kRqCQnk80=
+			</data>
+		</dict>
 		<key>flutter_assets/isolate_snapshot_data</key>
 		<dict>
 			<key>hash2</key>
@@ -491,7 +799,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			ss+mncmBOXSxXzsKA0/Y9SgETuQEQdP6bCgx2wOekus=
+			+1JSKVVhK+Zvju2oqvv7d0drn+RhIizJTp7UfV3ZDus=
 			</data>
 		</dict>
 		<key>flutter_assets/packages/fluttertoast/assets/toastify.css</key>

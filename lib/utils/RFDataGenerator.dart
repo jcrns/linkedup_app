@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:room_finder_flutter/models/Models.dart';
 import 'package:room_finder_flutter/models/RoomFinderModel.dart';
+import 'package:room_finder_flutter/screens/FavortiesScreen.dart';
 import 'package:room_finder_flutter/screens/RFAboutUsScreen.dart';
 import 'package:room_finder_flutter/screens/RFHelpScreen.dart';
 import 'package:room_finder_flutter/screens/RFNotificationScreen.dart';
@@ -153,46 +154,46 @@ List<RoomFinderModel> locationList() {
   return locationListData;
 }
 
-List<Product> productList() {
-  return [
-    Product(
-      img: rf_location1,
-      title: 'Luxury Studio',
-      price: '\$450/month',
-      description: 'Modern studio with city views',
-      views: '1.8k',
-      rating: 4.7,
-      color: Colors.blue.shade100,
-    ),
-    Product(
-      img: rf_location2,
-      title: 'Downtown Loft',
-      price: '\$680/month',
-      description: 'Spacious industrial-style loft',
-      views: '2.3k',
-      rating: 4.9,
-      color: Colors.amber.shade100,
-    ),
-    Product(
-      img: rf_location3,
-      title: 'Garden Cottage',
-      price: '\$320/month',
-      description: 'Quiet garden-side studio',
-      views: '956',
-      rating: 4.3,
-      color: Colors.green.shade100,
-    ),
-    Product(
-      img: rf_location4,
-      title: 'Executive Suite',
-      price: '\$850/month',
-      description: 'Luxury high-rise apartment',
-      views: '3.1k',
-      rating: 4.8,
-      color: Colors.purple.shade100,
-    ),
-  ];
-}
+// List<Product> productList() {
+//   return [
+//     Product(
+//       img: rf_location1,
+//       title: 'Luxury Studio',
+//       price: '\$450/month',
+//       description: 'Modern studio with city views',
+//       views: '1.8k',
+//       rating: 4.7,
+//       color: Colors.blue.shade100,
+//     ),
+//     Product(
+//       img: rf_location2,
+//       title: 'Downtown Loft',
+//       price: '\$680/month',
+//       description: 'Spacious industrial-style loft',
+//       views: '2.3k',
+//       rating: 4.9,
+//       color: Colors.amber.shade100,
+//     ),
+//     Product(
+//       img: rf_location3,
+//       title: 'Garden Cottage',
+//       price: '\$320/month',
+//       description: 'Quiet garden-side studio',
+//       views: '956',
+//       rating: 4.3,
+//       color: Colors.green.shade100,
+//     ),
+//     Product(
+//       img: rf_location4,
+//       title: 'Executive Suite',
+//       price: '\$850/month',
+//       description: 'Luxury high-rise apartment',
+//       views: '3.1k',
+//       rating: 4.8,
+//       color: Colors.purple.shade100,
+//     ),
+//   ];
+// }
 
 List<RoomFinderModel> faqList() {
   List<RoomFinderModel> faqListData = [];
@@ -226,8 +227,9 @@ List<RoomFinderModel> yesterdayNotificationList() {
 List<RoomFinderModel> settingList() {
   List<RoomFinderModel> settingListData = [];
   settingListData.add(RoomFinderModel(img: rf_notification, roomCategoryName: "Notifications", newScreenWidget: RFNotificationScreen()));
-  settingListData.add(RoomFinderModel(img: rf_recent_view, roomCategoryName: "Recent Viewed", newScreenWidget: RFRecentlyViewedScreen()));
-  settingListData.add(RoomFinderModel(img: rf_faq, roomCategoryName: "Investments", newScreenWidget: RFHelpScreen()));
+  settingListData.add(RoomFinderModel(img: rf_recent_view, roomCategoryName: "Favorite", newScreenWidget: FavoritesScreen()));
+  settingListData.add(RoomFinderModel(img: rf_faq, roomCategoryName: "My Business", newScreenWidget: RFHelpScreen()));
+  // settingListData.add(RoomFinderModel(img: rf_faq, roomCategoryName: "Investments", newScreenWidget: RFHelpScreen()));
   settingListData.add(RoomFinderModel(img: rf_about_us, roomCategoryName: "About us", newScreenWidget: RFAboutUsScreen()));
   settingListData.add(RoomFinderModel(img: rf_sign_out, roomCategoryName: "Sign Out", newScreenWidget: SizedBox()));
 

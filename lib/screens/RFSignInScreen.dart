@@ -14,16 +14,16 @@ import 'package:room_finder_flutter/utils/RFWidget.dart';
 import 'package:http/http.dart' as http;
 
 // ignore: must_be_immutable
-class RFEmailSignInScreen extends StatefulWidget {
+class RFSignInScreen extends StatefulWidget {
   bool showDialog;
 
-  RFEmailSignInScreen({this.showDialog = false});
+  RFSignInScreen({this.showDialog = false});
 
   @override
-  _RFEmailSignInScreenState createState() => _RFEmailSignInScreenState();
+  _RFSignInScreenState createState() => _RFSignInScreenState();
 }
 
-class _RFEmailSignInScreenState extends State<RFEmailSignInScreen> {
+class _RFSignInScreenState extends State<RFSignInScreen> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   final _secureStorage = const FlutterSecureStorage();
@@ -70,7 +70,7 @@ bool isLoading = false;  // To manage the loading state
     String username = emailController.text.toLowerCase();
     String password = passwordController.text;
 
-    var url = Uri.parse('http://127.0.0.1:8000/api/auth/login/');
+    var url = Uri.parse('http://127.0.0.1:5000/api/auth/login/');
 
     try {
       var response = await http.post(
@@ -93,11 +93,14 @@ bool isLoading = false;  // To manage the loading state
         // Save the token and the credentials securely
         await setValue('auth_token', token);
         await setValue('profile', profile);
+        await setValue('user_id', profile['id'].toString());
         await _saveCredentials(username, password);  // Save credentials securely
 
         // Call the function to verify if the user profile exists
         // await verifyUserProfile(token);
         toast("Profile exists. Navigating to main screen...");
+        print("profile['id'].toString())");
+        print(profile['id'].toString());
         // HomeScreen().launch(context);
 
         Navigator.pushReplacement(

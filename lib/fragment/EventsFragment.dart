@@ -22,7 +22,7 @@ class _EventsFragmentState extends State<EventsFragment> {
       isLoading = true;
     });
 
-    var url = Uri.parse('http://127.0.0.1:8000/api/events');
+    var url = Uri.parse('http://127.0.0.1:5000/api/events');
     String token = getStringAsync('auth_token', defaultValue: '');
 
     // if (token.isEmpty) {

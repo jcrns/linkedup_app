@@ -1,33 +1,47 @@
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
-import 'package:room_finder_flutter/components/RFCongratulatedDialog.dart';
 import 'package:room_finder_flutter/models/Models.dart';
+import 'package:room_finder_flutter/services/FavoritesService.dart';
 import 'package:room_finder_flutter/utils/RFColors.dart';
 import 'package:room_finder_flutter/utils/RFWidget.dart';
 
-class RFBusinessDescriptionScreen extends StatefulWidget {
-  final Business? businessData; // Updated to EventModel
+class BusinessDescriptionScreen extends StatefulWidget {
+  final Business businessData;
 
-  RFBusinessDescriptionScreen({this.businessData});
+  const BusinessDescriptionScreen({Key? key, required this.businessData}) : super(key: key);
 
   @override
-  _RFBusinessDescriptionScreenState createState() => _RFBusinessDescriptionScreenState();
+  _BusinessDescriptionScreenState createState() => _BusinessDescriptionScreenState();
 }
 
-class _RFBusinessDescriptionScreenState extends State<RFBusinessDescriptionScreen> {
+class _BusinessDescriptionScreenState extends State<BusinessDescriptionScreen> {
+  bool isFavorite = false;
+
   @override
   void initState() {
     super.initState();
-    init();
-  }
-
-  void init() async {
     setStatusBarColor(Colors.transparent, statusBarIconBrightness: Brightness.light);
+    _checkIfFavorited();
   }
 
-  @override
-  void setState(fn) {
-    if (mounted) super.setState(fn);
+  Future<void> _checkIfFavorited() async {
+    final favorited = await FavoritesService.isBusinessFavorited(widget.businessData.id!);
+    setState(() {
+      isFavorite = favorited;
+    });
+  }
+
+  Future<void> _toggleFavorite() async {
+    if (isFavorite) {
+      await FavoritesService.removeBusiness(widget.businessData.id!);
+      toast('Removed from favorites');
+    } else {
+      await FavoritesService.addBusiness(widget.businessData.toJson());
+      toast('Added to favorites');
+    }
+    setState(() {
+      isFavorite = !isFavorite;
+    });
   }
 
   @override
@@ -36,96 +50,446 @@ class _RFBusinessDescriptionScreenState extends State<RFBusinessDescriptionScree
     super.dispose();
   }
 
+  Widget _buildInfoCard(String title, String value, IconData icon) {
+    return Container(
+      padding: EdgeInsets.all(16),
+      decoration: boxDecorationWithRoundedCorners(
+        backgroundColor: context.cardColor,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Row(
+        children: [
+          Container(
+            width: 40,
+            height: 40,
+            decoration: boxDecorationWithRoundedCorners(
+              backgroundColor: rf_primaryColor.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Icon(icon, color: rf_primaryColor, size: 20),
+          ),
+          12.width,
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(title, style: secondaryTextStyle(size: 12)),
+                4.height,
+                Text(value, style: boldTextStyle(), maxLines: 2, overflow: TextOverflow.ellipsis),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDetailSection(String title, String? content) {
+    if (content == null || content.isEmpty) return SizedBox();
+    
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(title, style: boldTextStyle(size: 16)),
+        8.height,
+        Text(content, style: primaryTextStyle()),
+        16.height,
+      ],
+    );
+  }
+
+  Widget _buildMetricCard(String label, String value, Color color) {
+    return Container(
+      padding: EdgeInsets.all(16),
+      decoration: boxDecorationWithRoundedCorners(
+        backgroundColor: color.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Column(
+        children: [
+          Text(value, style: boldTextStyle(size: 20, color: color)),
+          4.height,
+          Text(label, style: secondaryTextStyle(size: 12)),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      bottomNavigationBar: AppButton(
-        color: rf_primaryColor,
-        elevation: 0,
-        child: Text('Join Now', style: boldTextStyle(color: white)),
-        width: context.width(),
-        onTap: () {
-          showInDialog(context, barrierDismissible: true, builder: (context) {
-            return RFCongratulatedDialog();
-          });
-        },
-      ).paddingSymmetric(horizontal: 16, vertical: 24),
-      body: NestedScrollView(
-        headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-          return <Widget>[
-            SliverAppBar(
-              leading: IconButton(
-                icon: Icon(Icons.arrow_back_ios_new, color: white, size: 18),
-                onPressed: () {
-                  finish(context);
-                },
-              ),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.only(bottomLeft: Radius.circular(16), bottomRight: Radius.circular(16)),
-              ),
-              backgroundColor: rf_primaryColor,
-              pinned: true,
-              elevation: 2,
-              expandedHeight: 300,
-              flexibleSpace: FlexibleSpaceBar(
-                collapseMode: CollapseMode.parallax,
-                titlePadding: EdgeInsets.all(10),
-                centerTitle: true,
-                background: Stack(
-                  children: [
-                    // Replace with actual event image URL
-                    rfCommonCachedNetworkImage(
-                      widget.businessData!.image ?? '', // Replace with event image URL
-                      fit: BoxFit.cover,
-                      width: context.width(),
-                      height: 350,
+    return DefaultTabController(
+      length: 3,
+      child: Scaffold(
+        backgroundColor: context.cardColor,
+        body: NestedScrollView(
+          headerSliverBuilder: (context, innerBoxIsScrolled) {
+            return [
+              SliverAppBar(
+                leading: Container(
+                  margin: EdgeInsets.all(8),
+                  decoration: boxDecorationWithRoundedCorners(
+                    backgroundColor: Colors.black.withOpacity(0.5),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: IconButton(
+                    icon: Icon(Icons.arrow_back, color: white),
+                    onPressed: () => finish(context),
+                  ),
+                ),
+                actions: [
+                  Container(
+                    margin: EdgeInsets.all(8),
+                    decoration: boxDecorationWithRoundedCorners(
+                      backgroundColor: Colors.black.withOpacity(0.5),
+                      borderRadius: BorderRadius.circular(8),
                     ),
-                    Container(
-                      padding: EdgeInsets.symmetric(horizontal: 24, vertical: 32),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(widget.businessData!.name, style: boldTextStyle(color: white, size: 18)), // Event Name
-                          8.height,
-                          Text("Location: ${widget.businessData!.location}", style: secondaryTextStyle(color: white)), // Location
-                          8.height,
-                          Row(
-                            children: [
-                              Text("${widget.businessData!.rating} ", style: boldTextStyle(color: white)), // Rating
-                              Icon(Icons.star, color: Colors.amber, size: 18), // Star icon for rating
-                            ],
-                          ),
-                        ],
+                    child: IconButton(
+                      icon: Icon(
+                        isFavorite ? Icons.favorite : Icons.favorite_border,
+                        color: isFavorite ? Colors.red : white,
                       ),
-                    )
-                  ],
+                      onPressed: _toggleFavorite, // Updated to use the new method
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.all(8),
+                    decoration: boxDecorationWithRoundedCorners(
+                      backgroundColor: Colors.black.withOpacity(0.5),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: IconButton(
+                      icon: Icon(Icons.share, color: white),
+                      onPressed: () {
+                        toast('Share business');
+                      },
+                    ),
+                  ),
+                ],
+                expandedHeight: 280,
+                flexibleSpace: FlexibleSpaceBar(
+                  background: Stack(
+                    children: [
+                      widget.businessData.image.isNotEmpty
+                          ? Image.network(
+                              widget.businessData.image,
+                              fit: BoxFit.cover,
+                              width: context.width(),
+                              height: 300,
+                              errorBuilder: (context, error, stackTrace) {
+                                return Container(
+                                  color: Colors.grey[300],
+                                  child: Icon(Icons.business, size: 80, color: Colors.grey),
+                                );
+                              },
+                            )
+                          : Container(
+                              color: Colors.grey[300],
+                              child: Icon(Icons.business, size: 80, color: Colors.grey),
+                            ),
+                      Container(
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.bottomCenter,
+                            end: Alignment.topCenter,
+                            colors: [Colors.black.withOpacity(0.7), Colors.transparent],
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        bottom: 16,
+                        left: 16,
+                        right: 16,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              widget.businessData.name,
+                              style: boldTextStyle(color: white, size: 24),
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            8.height,
+                            Row(
+                              children: [
+                                Icon(Icons.location_on, size: 16, color: white),
+                                4.width,
+                                Expanded(
+                                  child: Text(
+                                    widget.businessData.location,
+                                    style: secondaryTextStyle(color: white),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            8.height,
+                            Row(
+                              children: [
+                                Container(
+                                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                  decoration: boxDecorationWithRoundedCorners(
+                                    backgroundColor: Colors.white.withOpacity(0.2),
+                                    borderRadius: BorderRadius.circular(4),
+                                  ),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Icon(Icons.star, size: 14, color: Colors.amber),
+                                      4.width,
+                                      Text(
+                                        widget.businessData.rating.toStringAsFixed(1),
+                                        style: boldTextStyle(color: white, size: 12),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                8.width,
+                                Container(
+                                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                  decoration: boxDecorationWithRoundedCorners(
+                                    backgroundColor: Colors.white.withOpacity(0.2),
+                                    borderRadius: BorderRadius.circular(4),
+                                  ),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Icon(Icons.visibility, size: 14, color: white),
+                                      4.width,
+                                      Text(
+                                        '${widget.businessData.views}',
+                                        style: boldTextStyle(color: white, size: 12),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ];
-        },
-        body: SingleChildScrollView(
-          child: Column(
+              SliverPersistentHeader(
+                pinned: true,
+                delegate: _SliverAppBarDelegate(
+                  TabBar(
+                    indicatorColor: rf_primaryColor,
+                    labelColor: rf_primaryColor,
+                    unselectedLabelColor: Colors.grey,
+                    labelStyle: boldTextStyle(),
+                    unselectedLabelStyle: primaryTextStyle(),
+                    tabs: [
+                      Tab(text: 'Overview'),
+                      Tab(text: 'Details'),
+                      Tab(text: 'Products'),
+                    ],
+                  ),
+                ),
+              ),
+            ];
+          },
+          body: TabBarView(
             children: [
-              // Event Details
-              Padding(
-                padding: const EdgeInsets.all(16.0),
+              // Overview Tab
+              SingleChildScrollView(
+                padding: EdgeInsets.all(16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text("Description", style: boldTextStyle(size: 16)),
-                    8.height,
-                    Text(widget.businessData!.description, style: secondaryTextStyle()), // Event Description
+                    Text('Quick Info', style: boldTextStyle(size: 18)),
                     16.height,
-                    Text("Address: ${widget.businessData!.address}", style: secondaryTextStyle()), // Event Address
+                    Wrap(
+                      spacing: 12,
+                      runSpacing: 12,
+                      children: [
+                        // ✅ CORRECTED: businessType
+                        _buildInfoCard('Category', widget.businessData.businessType, Icons.category),
+                        // ✅ CORRECTED: contactInfo
+                        _buildInfoCard('Contact', widget.businessData.contactInfo ?? 'Not provided', Icons.phone),
+                        // ✅ CORRECTED: website
+                        if (widget.businessData.website != null)
+                          _buildInfoCard('Website', 'Visit site', Icons.language),
+                        // ✅ CORRECTED: businessHours
+                        if (widget.businessData.businessHours != null)
+                          _buildInfoCard('Hours', widget.businessData.businessHours!, Icons.access_time),
+                      ],
+                    ),
+                    24.height,
+                    _buildDetailSection('About', widget.businessData.description),
+                    // ✅ CORRECTED: targetAudience
+                    if (widget.businessData.targetAudience != null)
+                      _buildDetailSection('Target Audience', widget.businessData.targetAudience),
+                    // ✅ CORRECTED: valuation and other metrics
+                    if (widget.businessData.valuation != null && widget.businessData.valuation! > 0) ...[
+                      Text('Business Metrics', style: boldTextStyle(size: 18)),
+                      16.height,
+                      GridView.count(
+                        shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
+                        crossAxisCount: 2,
+                        crossAxisSpacing: 12,
+                        mainAxisSpacing: 12,
+                        childAspectRatio: 1.2,
+                        children: [
+                          _buildMetricCard(
+                            'Valuation',
+                            '\$${widget.businessData.valuation!.toStringAsFixed(0)}',
+                            Colors.green,
+                          ),
+                          _buildMetricCard(
+                            'Investment',
+                            '\$${widget.businessData.totalInvestment ?? 0}',
+                            Colors.blue,
+                          ),
+                          _buildMetricCard(
+                            'Growth Rate',
+                            '${((widget.businessData.monthlyGrowthRate ?? 0) * 100).toStringAsFixed(1)}%',
+                            Colors.orange,
+                          ),
+                          _buildMetricCard(
+                            'Views',
+                            '${widget.businessData.views}',
+                            Colors.purple,
+                          ),
+                        ],
+                      ),
+                      24.height,
+                    ],
+                  ],
+                ),
+              ),
+              // Details Tab
+              SingleChildScrollView(
+                padding: EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildDetailSection('Full Description', widget.businessData.description),
+                    _buildDetailSection('Address', widget.businessData.address),
+                    // ✅ CORRECTED: contactInfo
+                    _buildDetailSection('Contact Information', widget.businessData.contactInfo),
+                    // ✅ CORRECTED: businessHours
+                    _buildDetailSection('Business Hours', widget.businessData.businessHours),
+                    // ✅ CORRECTED: targetAudience
+                    _buildDetailSection('Target Audience', widget.businessData.targetAudience),
+                    // ✅ CORRECTED: deals
+                    _buildDetailSection('Special Deals', widget.businessData.deals),
+                    // ✅ CORRECTED: socialMedia
+                    if (widget.businessData.socialMedia != null)
+                      _buildDetailSection('Social Media', widget.businessData.socialMedia),
+                  ],
+                ),
+              ),
+              // Products Tab
+              SingleChildScrollView(
+                padding: EdgeInsets.all(16),
+                child: Column(
+                  children: [
+                    Text('Products & Services', style: boldTextStyle(size: 18)),
+                    16.height,
+                    Container(
+                      padding: EdgeInsets.all(16),
+                      decoration: boxDecorationWithRoundedCorners(
+                        backgroundColor: context.cardColor,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Column(
+                        children: [
+                          Icon(Icons.shopping_bag_outlined, size: 48, color: Colors.grey),
+                          16.height,
+                          Text('No products listed yet', style: boldTextStyle()),
+                          8.height,
+                          Text(
+                            'This business hasn\'t added any products or services yet.',
+                            style: secondaryTextStyle(),
+                            textAlign: TextAlign.center,
+                          ),
+                          16.height,
+                          AppButton(
+                            text: 'Contact for Services',
+                            textColor: white,
+                            color: rf_primaryColor,
+                            onTap: () {
+                              toast('Contact business for services');
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
                   ],
                 ),
               ),
             ],
           ),
         ),
+        bottomNavigationBar: Container(
+          padding: EdgeInsets.all(16),
+          decoration: boxDecorationWithRoundedCorners(
+            backgroundColor: context.scaffoldBackgroundColor,
+            borderRadius: BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16)),
+            border: Border.all(color: context.dividerColor),
+          ),
+          child: SafeArea(
+            child: Row(
+              children: [
+                Expanded(
+                  child: AppButton(
+                    text: 'Contact',
+                    textColor: rf_primaryColor,
+                    color: context.cardColor,
+                    onTap: () {
+                      toast('Contact business');
+                    },
+                  ),
+                ),
+                12.width,
+                Expanded(
+                  child: AppButton(
+                    text: 'Visit',
+                    textColor: white,
+                    color: rf_primaryColor,
+                    onTap: () {
+                      // ✅ CORRECTED: website
+                      if (widget.businessData.website != null) {
+                        toast('Opening website');
+                      } else {
+                        toast('No website available');
+                      }
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
     );
+  }
+}
+
+class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
+  final TabBar _tabBar;
+
+  _SliverAppBarDelegate(this._tabBar);
+
+  @override
+  double get minExtent => _tabBar.preferredSize.height;
+  @override
+  double get maxExtent => _tabBar.preferredSize.height;
+
+  @override
+  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
+    return Container(
+      color: context.scaffoldBackgroundColor,
+      child: _tabBar,
+    );
+  }
+
+  @override
+  bool shouldRebuild(_SliverAppBarDelegate oldDelegate) {
+    return false;
   }
 }

@@ -37,7 +37,7 @@ class CategoryProductListComponent extends StatelessWidget {
                       Row(
                         children: [
                           // Text(productData!.location.validate(), style: boldTextStyle(color: rf_primaryColor)),
-                          Text(productData!.rating.toString(), style: secondaryTextStyle()),
+                          // Text(productData!.rating.toString(), style: secondaryTextStyle()),
                         ],
                       ).fit(),
                     ],

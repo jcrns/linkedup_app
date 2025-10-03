@@ -1,0 +1,59 @@
+import 'package:flutter/material.dart';
+import 'package:nb_utils/nb_utils.dart';
+import 'package:room_finder_flutter/main.dart';
+
+
+sSAppButton({
+  Function? onPressed,
+  String? title,
+  required BuildContext context,
+  Color? color,
+  Color? textColor,
+}) {
+  return AppButton(
+    shapeBorder: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24), side: BorderSide(color: Color(0xff808080), width: 1)),
+    text: title,
+    color: color ?? Color(0xff000000),
+    textColor: textColor ?? Color(0xfffffbfb),
+    onTap: () {
+      onPressed!();
+    },
+    width: context.width(),
+  );
+}
+
+InputDecoration sSInputDecoration({String? name, BuildContext? context, Widget? icon}) {
+  return InputDecoration(
+    disabledBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(4.0),
+      borderSide: BorderSide(color: appStore.isDarkModeOn ? context!.cardColor : Colors.grey.withOpacity(0.4), width: 1),
+    ),
+    focusedBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(4.0),
+      borderSide: BorderSide(color: appStore.isDarkModeOn ? context!.cardColor : Colors.grey.withOpacity(0.4), width: 1),
+    ),
+    enabledBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(4.0),
+      borderSide: BorderSide(color: appStore.isDarkModeOn ? context!.cardColor : Colors.grey.withOpacity(0.4), width: 1),
+    ),
+    labelText: name,
+    labelStyle: primaryTextStyle(),
+    hintStyle: TextStyle(fontWeight: FontWeight.w400, fontStyle: FontStyle.normal, fontSize: 14, color: Color(0xff000000)),
+    filled: true,
+    fillColor: appStore.isDarkModeOn ? context!.cardColor : Color(0xfff2f2f3),
+    isDense: false,
+    contentPadding: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+    suffixIcon: icon,
+  );
+}
+
+Widget settingWidget({String? title, String? subtitle}) {
+  return Column(
+    mainAxisAlignment: MainAxisAlignment.center,
+    crossAxisAlignment: CrossAxisAlignment.center,
+    children: [
+      Text(title!, style: boldTextStyle()),
+      Text(subtitle!, style: secondaryTextStyle(), maxLines: 2),
+    ],
+  );
+}

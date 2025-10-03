@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:room_finder_flutter/components/RFCommonAppComponent.dart';
 import 'package:room_finder_flutter/screens/CompleteProfileScreen.dart';
-import 'package:room_finder_flutter/screens/RFEmailSignInScreen.dart';
+import 'package:room_finder_flutter/screens/RFSignInScreen.dart';
 import 'package:room_finder_flutter/utils/RFColors.dart';
 import 'package:room_finder_flutter/utils/RFWidget.dart';
 import '../utils/RFString.dart';
@@ -54,7 +54,7 @@ class _RFSignUpScreenState extends State<RFSignUpScreen> {
     String username = usernameController.text.toLowerCase();
     String password = passwordController.text;
 
-    var url = Uri.parse('http://127.0.0.1:8000/api/auth/login/');
+    var url = Uri.parse('http://127.0.0.1:5000/api/auth/login/');
 
     try {
       var response = await http.post(
@@ -106,7 +106,7 @@ class _RFSignUpScreenState extends State<RFSignUpScreen> {
       return;
     }
 
-    var url = Uri.parse('http://127.0.0.1:8000/api-signup/');
+    var url = Uri.parse('http://127.0.0.1:5000/api-signup/');
 
     try {
       var response = await http.post(
@@ -241,7 +241,7 @@ class _RFSignUpScreenState extends State<RFSignUpScreen> {
                 _saveCredentials(usernameController.text, passwordController.text); 
                 
                 // Navigate to the login screen after successful registration
-                RFEmailSignInScreen(showDialog: true).launch(context);
+                RFSignInScreen(showDialog: true).launch(context);
               },
             ),
           ],

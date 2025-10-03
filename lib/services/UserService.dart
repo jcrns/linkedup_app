@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class UserService {
-  static const String _baseUrl = 'http://127.0.0.1:8000/api/';
+  static const String _baseUrl = 'http://127.0.0.1:5000/api/';
     
     
     
@@ -13,11 +13,53 @@ class UserService {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove('auth_token');
   }
+    // Helper method to get auth token
+  static Future<String?> _getAuthToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('auth_token');
+  }
+
+    // 1. Get current user's business
+  static Future<Map<String, dynamic>?> getMyBusiness() async {
+    final token = await _getAuthToken();
+    if (token == null) {
+      print('No auth token found');
+      return null;
+    }
+
+    try {
+      final response = await http.get(
+        Uri.parse('${_baseUrl}businesses/my_business/'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Token $token',
+        },
+      );
+
+      print('My Business API Response Status: ${response.statusCode}');
+
+      if (response.statusCode == 200) {
+        final responseBody = json.decode(response.body);
+        return responseBody;
+      } else if (response.statusCode == 404) {
+        print('No business found for user');
+        return null;
+      } else {
+        print('Failed to load my business: ${response.statusCode}');
+        return null;
+      }
+    } catch (e) {
+      print('Error fetching user business: $e');
+      return null;
+    }
+  }
+
   Future<Map<String, dynamic>> fetchProducts() async { // Renamed to fetchEvents
     print("fetchProducts called");
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('auth_token');
-    var url = Uri.parse('http://127.0.0.1:8000/api/products');
+    var url = Uri.parse('http://127.0.0.1:5000/api/products');
 
     // if (token.isEmpty) {
     //   toast("Token not found. Please login again.");
@@ -66,7 +108,7 @@ class UserService {
   }
   }
 
-  static Future<Map<String, dynamic>> getUserProfile() async {
+  static Future<Map<String, dynamic>?> getUserProfile() async {
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('auth_token');
     
