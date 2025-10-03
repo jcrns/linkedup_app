@@ -137,6 +137,8 @@ class Business {
     };
   }
 }
+
+
 // Add to Models.dart:
 class Opportunity {
   final String title;

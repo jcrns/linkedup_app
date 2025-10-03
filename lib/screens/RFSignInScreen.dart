@@ -1,6 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:room_finder_flutter/components/RFCommonAppComponent.dart';
@@ -11,9 +9,8 @@ import 'package:room_finder_flutter/screens/RFSignUpScreen.dart';
 import 'package:room_finder_flutter/utils/RFColors.dart';
 import 'package:room_finder_flutter/utils/RFString.dart';
 import 'package:room_finder_flutter/utils/RFWidget.dart';
-import 'package:http/http.dart' as http;
+import 'package:room_finder_flutter/services/UserService.dart';
 
-// ignore: must_be_immutable
 class RFSignInScreen extends StatefulWidget {
   bool showDialog;
 
@@ -26,100 +23,54 @@ class RFSignInScreen extends StatefulWidget {
 class _RFSignInScreenState extends State<RFSignInScreen> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-  final _secureStorage = const FlutterSecureStorage();
-
+  
   FocusNode emailFocusNode = FocusNode();
   FocusNode passWordFocusNode = FocusNode();
 
   Timer? timer;
-bool isLoading = false;  // To manage the loading state
+  bool isLoading = false;
+  final UserService _userService = UserService();
 
   @override
   void initState() {
     super.initState();
-    _loadCredentials();  // Load saved credentials on app start
+    _loadCredentials();
     init();
   }
 
-  // Future<void> init() async {}
-
-  // Function to load username and password from secure storage
   Future<void> _loadCredentials() async {
-    String? savedUsername = await _secureStorage.read(key: 'username');
-    String? savedPassword = await _secureStorage.read(key: 'password');
-
-    if (savedUsername != null && savedPassword != null) {
+    final credentials = await _userService.loadCredentials();
+    if (credentials['username'] != null && credentials['password'] != null) {
       setState(() {
-        emailController.text = savedUsername;
-        passwordController.text = savedPassword;
+        emailController.text = credentials['username']!;
+        passwordController.text = credentials['password']!;
       });
     }
   }
 
-  // Function to save username and password to secure storage
-  Future<void> _saveCredentials(String username, String password) async {
-    await _secureStorage.write(key: 'username', value: username);
-    await _secureStorage.write(key: 'password', value: password);
-  }
-
-  Future<void> loginUser() async {
+  Future<void> _handleLogin() async {
     setState(() {
       isLoading = true;
     });
 
-    String username = emailController.text.toLowerCase();
-    String password = passwordController.text;
-
-    var url = Uri.parse('http://127.0.0.1:5000/api/auth/login/');
-
-    try {
-      var response = await http.post(
-        url,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: jsonEncode({
-          'username': username,
-          'password': password,
-        }),
-      );
-
-      if (response.statusCode == 200) {
-        print(response.body);
-        var jsonResponse = jsonDecode(response.body);
-        var token = jsonResponse['token'];
-        var profile = jsonResponse['profile'];
-
-        // Save the token and the credentials securely
-        await setValue('auth_token', token);
-        await setValue('profile', profile);
-        await setValue('user_id', profile['id'].toString());
-        await _saveCredentials(username, password);  // Save credentials securely
-
-        // Call the function to verify if the user profile exists
-        // await verifyUserProfile(token);
-        toast("Profile exists. Navigating to main screen...");
-        print("profile['id'].toString())");
-        print(profile['id'].toString());
-        // HomeScreen().launch(context);
-
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => HomeScreen()),
-        );
-      } else {
-        print('Username: $username, Password: $password');
-        print(response.body);
-        toast("Login Failed: ${response.body}");
-      }
-    } catch (e) {
-      toast("An error occurred");
-      print(e);
-    }
+    final result = await _userService.loginUser(
+      emailController.text,
+      passwordController.text,
+    );
 
     setState(() {
       isLoading = false;
     });
+
+    if (result != null && result['success'] == true) {
+      toast("Profile exists. Navigating to main screen...");
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => HomeScreen()),
+      );
+    } else {
+      toast(result?['error'] ?? "Login failed");
+    }
   }
 
   void init() async {
@@ -187,14 +138,12 @@ bool isLoading = false;  // To manage the loading state
             32.height,
             AppButton(
               color: rf_primaryColor,
-              child: Text('Log In', style: boldTextStyle(color: white)),
+              child: isLoading 
+                ? SizedBox(height: 20, width: 20, child: CircularProgressIndicator(color: white))
+                : Text('Log In', style: boldTextStyle(color: white)),
               width: context.width(),
               elevation: 0,
-              onTap: () {
-                loginUser();
-                // HomeScreen().launch(context);
-
-              },
+              onTap: isLoading ? null : _handleLogin,
             ),
             Align(
               alignment: Alignment.topRight,

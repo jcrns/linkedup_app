@@ -1,8 +1,8 @@
-// screens/ProductDescriptionScreen.dart
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:room_finder_flutter/models/Models.dart';
 import 'package:room_finder_flutter/services/FavoritesService.dart';
+import 'package:room_finder_flutter/services/UserService.dart';
 import 'package:room_finder_flutter/utils/RFColors.dart';
 import 'package:room_finder_flutter/utils/RFWidget.dart';
 
@@ -17,12 +17,39 @@ class ProductDescriptionScreen extends StatefulWidget {
 
 class _ProductDescriptionScreenState extends State<ProductDescriptionScreen> {
   bool isFavorite = false;
+  bool isOwner = false;
+  int? currentUserId;
 
   @override
   void initState() {
     super.initState();
     setStatusBarColor(Colors.transparent, statusBarIconBrightness: Brightness.light);
     _checkIfFavorited();
+    _checkOwnership();
+  }
+
+  // In ProductDescriptionScreen.dart
+  Future<void> _checkOwnership() async {
+    try {
+      // Get current user's business
+      final myBusiness = await UserService.getMyBusiness();
+      if (myBusiness != null) {
+        final myBusinessObj = Business.fromJson(myBusiness);
+        setState(() {
+          // Check if the product's business ID matches the user's business ID
+          isOwner = myBusinessObj.id == widget.product.business?.id;
+        });
+      } else {
+        setState(() {
+          isOwner = false;
+        });
+      }
+    } catch (e) {
+      print('Error checking ownership: $e');
+      setState(() {
+        isOwner = false;
+      });
+    }
   }
 
   Future<void> _checkIfFavorited() async {
@@ -43,6 +70,17 @@ class _ProductDescriptionScreenState extends State<ProductDescriptionScreen> {
     setState(() {
       isFavorite = !isFavorite;
     });
+  }
+
+  void _editProduct() {
+    toast('Edit product functionality coming soon');
+    // Navigate to product edit screen
+    // ProductEditScreen(product: widget.product).launch(context);
+  }
+
+  void _manageInventory() {
+    toast('Inventory management coming soon');
+    // Navigate to inventory management
   }
 
   @override
@@ -73,6 +111,18 @@ class _ProductDescriptionScreenState extends State<ProductDescriptionScreen> {
               ),
             ),
             actions: [
+              if (isOwner) // Edit button for owner
+                Container(
+                  margin: EdgeInsets.all(8),
+                  decoration: boxDecorationWithRoundedCorners(
+                    backgroundColor: Colors.black.withOpacity(0.5),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: IconButton(
+                    icon: Icon(Icons.edit, color: white),
+                    onPressed: _editProduct,
+                  ),
+                ),
               Container(
                 margin: EdgeInsets.all(8),
                 decoration: boxDecorationWithRoundedCorners(
@@ -132,36 +182,83 @@ class _ProductDescriptionScreenState extends State<ProductDescriptionScreen> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Expanded(
-                              child: Text(
-                                widget.product.name,
-                                style: boldTextStyle(size: 24),
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                            Container(
-                              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                              decoration: boxDecorationWithRoundedCorners(
-                                backgroundColor: widget.product.stock > 0 ? Colors.green.withOpacity(0.1) : Colors.red.withOpacity(0.1),
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              child: Text(
-                                widget.product.stock > 0 ? 'In Stock' : 'Out of Stock',
-                                style: boldTextStyle(
-                                  size: 12,
-                                  color: widget.product.stock > 0 ? Colors.green : Colors.red,
-                                ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: Text(
+                                          widget.product.name,
+                                          style: boldTextStyle(size: 24),
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ),
+                                      if (isOwner)
+                                        Container(
+                                          padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                          decoration: boxDecorationWithRoundedCorners(
+                                            backgroundColor: Colors.green.withOpacity(0.8),
+                                            borderRadius: BorderRadius.circular(4),
+                                          ),
+                                          child: Text(
+                                            'Your Product',
+                                            style: boldTextStyle(color: white, size: 10),
+                                          ),
+                                        ),
+                                    ],
+                                  ),
+                                  8.height,
+                                  Text(
+                                    '\$${widget.product.price.toStringAsFixed(2)}',
+                                    style: boldTextStyle(size: 28, color: rf_primaryColor),
+                                  ),
+                                ],
                               ),
                             ),
                           ],
                         ),
-                        8.height,
-                        Text(
-                          '\$${widget.product.price.toStringAsFixed(2)}',
-                          style: boldTextStyle(size: 28, color: rf_primaryColor),
-                        ),
                         16.height,
                         
+                        // Owner Actions Section
+                        if (isOwner) 
+                          Container(
+                            padding: EdgeInsets.all(16),
+                            decoration: boxDecorationWithRoundedCorners(
+                              backgroundColor: Colors.blue.withOpacity(0.1),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Column(
+                              children: [
+                                Text('Product Management', style: boldTextStyle(size: 16, color: Colors.blue)),
+                                12.height,
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: AppButton(
+                                        text: 'Edit Product',
+                                        textColor: Colors.blue,
+                                        color: Colors.blue.withOpacity(0.1),
+                                        onTap: _editProduct,
+                                      ),
+                                    ),
+                                    12.width,
+                                    Expanded(
+                                      child: AppButton(
+                                        text: 'Manage Stock',
+                                        textColor: Colors.green,
+                                        color: Colors.green.withOpacity(0.1),
+                                        onTap: _manageInventory,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        16.height,
+
                         // Business info
                         if (widget.product.business != null) ...[
                           Container(
@@ -244,34 +341,36 @@ class _ProductDescriptionScreenState extends State<ProductDescriptionScreen> {
                         24.height,
 
                         // Contact & Actions
-                        Text('Contact Business', style: boldTextStyle(size: 18)),
-                        12.height,
-                        Row(
-                          children: [
-                            Expanded(
-                              child: AppButton(
-                                text: 'Message',
-                                textColor: rf_primaryColor,
-                                color: context.cardColor,
-                                onTap: () {
-                                  toast('Message feature coming soon');
-                                },
+                        if (!isOwner) ...[
+                          Text('Contact Business', style: boldTextStyle(size: 18)),
+                          12.height,
+                          Row(
+                            children: [
+                              Expanded(
+                                child: AppButton(
+                                  text: 'Message',
+                                  textColor: rf_primaryColor,
+                                  color: context.cardColor,
+                                  onTap: () {
+                                    toast('Message feature coming soon');
+                                  },
+                                ),
                               ),
-                            ),
-                            12.width,
-                            Expanded(
-                              child: AppButton(
-                                text: 'Call',
-                                textColor: white,
-                                color: rf_primaryColor,
-                                onTap: () {
-                                  toast('Call feature coming soon');
-                                },
+                              12.width,
+                              Expanded(
+                                child: AppButton(
+                                  text: 'Call',
+                                  textColor: white,
+                                  color: rf_primaryColor,
+                                  onTap: () {
+                                    toast('Call feature coming soon');
+                                  },
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
-                        24.height,
+                            ],
+                          ),
+                          24.height,
+                        ],
                       ],
                     ),
                   ),
@@ -296,26 +395,31 @@ class _ProductDescriptionScreenState extends State<ProductDescriptionScreen> {
         child: SafeArea(
           child: Row(
             children: [
-              Container(
-                decoration: boxDecorationWithRoundedCorners(
-                  backgroundColor: context.cardColor,
-                  borderRadius: BorderRadius.circular(12),
+              if (!isOwner) // Only show cart for non-owners
+                Container(
+                  decoration: boxDecorationWithRoundedCorners(
+                    backgroundColor: context.cardColor,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: IconButton(
+                    icon: Icon(Icons.shopping_cart_outlined, color: rf_primaryColor),
+                    onPressed: () {
+                      toast('Add to cart feature coming soon');
+                    },
+                  ),
                 ),
-                child: IconButton(
-                  icon: Icon(Icons.shopping_cart_outlined, color: rf_primaryColor),
-                  onPressed: () {
-                    toast('Add to cart feature coming soon');
-                  },
-                ),
-              ),
-              12.width,
+              if (!isOwner) 12.width,
               Expanded(
                 child: AppButton(
-                  text: 'Buy Now',
+                  text: isOwner ? 'Manage Product' : 'Buy Now',
                   textColor: white,
                   color: rf_primaryColor,
                   onTap: () {
-                    toast('Purchase feature coming soon');
+                    if (isOwner) {
+                      _editProduct();
+                    } else {
+                      toast('Purchase feature coming soon');
+                    }
                   },
                 ),
               ),

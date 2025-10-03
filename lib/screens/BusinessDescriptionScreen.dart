@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:room_finder_flutter/models/Models.dart';
 import 'package:room_finder_flutter/services/FavoritesService.dart';
+import 'package:room_finder_flutter/services/UserService.dart';
 import 'package:room_finder_flutter/utils/RFColors.dart';
 import 'package:room_finder_flutter/utils/RFWidget.dart';
 
@@ -16,12 +17,45 @@ class BusinessDescriptionScreen extends StatefulWidget {
 
 class _BusinessDescriptionScreenState extends State<BusinessDescriptionScreen> {
   bool isFavorite = false;
+  bool isOwner = false;
+  int? currentUserId;
 
   @override
   void initState() {
     super.initState();
     setStatusBarColor(Colors.transparent, statusBarIconBrightness: Brightness.light);
     _checkIfFavorited();
+    _checkOwnership();
+  }
+
+  // In both BusinessDescriptionScreen and ProductDescriptionScreen
+  Future<void> _checkOwnership() async {
+    try {
+      // Get current user's business
+      final myBusiness = await UserService.getMyBusiness();
+      if (myBusiness != null) {
+        final myBusinessObj = Business.fromJson(myBusiness);
+        
+        // For BusinessDescriptionScreen:
+        isOwner = myBusinessObj.id == widget.businessData.id;
+        
+        
+        setState(() {
+          // BusinessDescriptionScreen
+          isOwner = myBusinessObj.id == widget.businessData.id;
+          
+        });
+      } else {
+        setState(() {
+          isOwner = false;
+        });
+      }
+    } catch (e) {
+      print('Error checking ownership: $e');
+      setState(() {
+        isOwner = false;
+      });
+    }
   }
 
   Future<void> _checkIfFavorited() async {
@@ -42,6 +76,22 @@ class _BusinessDescriptionScreenState extends State<BusinessDescriptionScreen> {
     setState(() {
       isFavorite = !isFavorite;
     });
+  }
+
+  void _editBusiness() {
+    toast('Edit business functionality coming soon');
+    // Navigate to business edit screen
+    // BusinessEditScreen(business: widget.businessData).launch(context);
+  }
+
+  void _manageProducts() {
+    toast('Product management coming soon');
+    // Navigate to product management screen
+  }
+
+  void _viewAnalytics() {
+    toast('Analytics coming soon');
+    // Navigate to analytics screen
   }
 
   @override
@@ -137,6 +187,18 @@ class _BusinessDescriptionScreenState extends State<BusinessDescriptionScreen> {
                   ),
                 ),
                 actions: [
+                  if (isOwner) // Edit button for owner
+                    Container(
+                      margin: EdgeInsets.all(8),
+                      decoration: boxDecorationWithRoundedCorners(
+                        backgroundColor: Colors.black.withOpacity(0.5),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: IconButton(
+                        icon: Icon(Icons.edit, color: white),
+                        onPressed: _editBusiness,
+                      ),
+                    ),
                   Container(
                     margin: EdgeInsets.all(8),
                     decoration: boxDecorationWithRoundedCorners(
@@ -148,7 +210,7 @@ class _BusinessDescriptionScreenState extends State<BusinessDescriptionScreen> {
                         isFavorite ? Icons.favorite : Icons.favorite_border,
                         color: isFavorite ? Colors.red : white,
                       ),
-                      onPressed: _toggleFavorite, // Updated to use the new method
+                      onPressed: _toggleFavorite,
                     ),
                   ),
                   Container(
@@ -202,11 +264,29 @@ class _BusinessDescriptionScreenState extends State<BusinessDescriptionScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              widget.businessData.name,
-                              style: boldTextStyle(color: white, size: 24),
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    widget.businessData.name,
+                                    style: boldTextStyle(color: white, size: 24),
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                                if (isOwner)
+                                  Container(
+                                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                    decoration: boxDecorationWithRoundedCorners(
+                                      backgroundColor: Colors.green.withOpacity(0.8),
+                                      borderRadius: BorderRadius.circular(4),
+                                    ),
+                                    child: Text(
+                                      'Your Business',
+                                      style: boldTextStyle(color: white, size: 10),
+                                    ),
+                                  ),
+                              ],
                             ),
                             8.height,
                             Row(
@@ -299,30 +379,70 @@ class _BusinessDescriptionScreenState extends State<BusinessDescriptionScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    // Owner Actions Section
+                    if (isOwner) ...[
+                      Container(
+                        padding: EdgeInsets.all(16),
+                        decoration: boxDecorationWithRoundedCorners(
+                          backgroundColor: Colors.blue.withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Column(
+                          children: [
+                            Text('Business Owner Tools', style: boldTextStyle(size: 18, color: Colors.blue)),
+                            12.height,
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: AppButton(
+                                    text: 'Edit Business',
+                                    textColor: Colors.blue,
+                                    color: Colors.blue.withOpacity(0.1),
+                                    onTap: _editBusiness,
+                                  ),
+                                ),
+                                12.width,
+                                Expanded(
+                                  child: AppButton(
+                                    text: 'Edit Products',
+                                    textColor: Colors.green,
+                                    color: Colors.green.withOpacity(0.1),
+                                    onTap: _manageProducts,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            8.height,
+                            AppButton(
+                              text: 'View Analytics',
+                              textColor: Colors.purple,
+                              color: Colors.purple.withOpacity(0.1),
+                              onTap: _viewAnalytics,
+                            ),
+                          ],
+                        ),
+                      ),
+                      16.height,
+                    ],
+
                     Text('Quick Info', style: boldTextStyle(size: 18)),
                     16.height,
                     Wrap(
                       spacing: 12,
                       runSpacing: 12,
                       children: [
-                        // ✅ CORRECTED: businessType
                         _buildInfoCard('Category', widget.businessData.businessType, Icons.category),
-                        // ✅ CORRECTED: contactInfo
                         _buildInfoCard('Contact', widget.businessData.contactInfo ?? 'Not provided', Icons.phone),
-                        // ✅ CORRECTED: website
                         if (widget.businessData.website != null)
                           _buildInfoCard('Website', 'Visit site', Icons.language),
-                        // ✅ CORRECTED: businessHours
                         if (widget.businessData.businessHours != null)
                           _buildInfoCard('Hours', widget.businessData.businessHours!, Icons.access_time),
                       ],
                     ),
                     24.height,
                     _buildDetailSection('About', widget.businessData.description),
-                    // ✅ CORRECTED: targetAudience
                     if (widget.businessData.targetAudience != null)
                       _buildDetailSection('Target Audience', widget.businessData.targetAudience),
-                    // ✅ CORRECTED: valuation and other metrics
                     if (widget.businessData.valuation != null && widget.businessData.valuation! > 0) ...[
                       Text('Business Metrics', style: boldTextStyle(size: 18)),
                       16.height,
@@ -369,15 +489,10 @@ class _BusinessDescriptionScreenState extends State<BusinessDescriptionScreen> {
                   children: [
                     _buildDetailSection('Full Description', widget.businessData.description),
                     _buildDetailSection('Address', widget.businessData.address),
-                    // ✅ CORRECTED: contactInfo
                     _buildDetailSection('Contact Information', widget.businessData.contactInfo),
-                    // ✅ CORRECTED: businessHours
                     _buildDetailSection('Business Hours', widget.businessData.businessHours),
-                    // ✅ CORRECTED: targetAudience
                     _buildDetailSection('Target Audience', widget.businessData.targetAudience),
-                    // ✅ CORRECTED: deals
                     _buildDetailSection('Special Deals', widget.businessData.deals),
-                    // ✅ CORRECTED: socialMedia
                     if (widget.businessData.socialMedia != null)
                       _buildDetailSection('Social Media', widget.businessData.socialMedia),
                   ],
@@ -388,6 +503,30 @@ class _BusinessDescriptionScreenState extends State<BusinessDescriptionScreen> {
                 padding: EdgeInsets.all(16),
                 child: Column(
                   children: [
+                    if (isOwner) ...[
+                      Container(
+                        padding: EdgeInsets.all(16),
+                        decoration: boxDecorationWithRoundedCorners(
+                          backgroundColor: Colors.green.withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Column(
+                          children: [
+                            Text('Product Management', style: boldTextStyle(size: 18, color: Colors.green)),
+                            12.height,
+                            AppButton(
+                              text: 'Add New Product',
+                              textColor: white,
+                              color: Colors.green,
+                              onTap: () {
+                                toast('Add product functionality coming soon');
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                      16.height,
+                    ],
                     Text('Products & Services', style: boldTextStyle(size: 18)),
                     16.height,
                     Container(
@@ -403,17 +542,23 @@ class _BusinessDescriptionScreenState extends State<BusinessDescriptionScreen> {
                           Text('No products listed yet', style: boldTextStyle()),
                           8.height,
                           Text(
-                            'This business hasn\'t added any products or services yet.',
+                            isOwner 
+                              ? 'Start adding products to showcase your offerings'
+                              : 'This business hasn\'t added any products or services yet.',
                             style: secondaryTextStyle(),
                             textAlign: TextAlign.center,
                           ),
                           16.height,
                           AppButton(
-                            text: 'Contact for Services',
+                            text: isOwner ? 'Add Your First Product' : 'Contact for Services',
                             textColor: white,
                             color: rf_primaryColor,
                             onTap: () {
-                              toast('Contact business for services');
+                              if (isOwner) {
+                                toast('Add product functionality coming soon');
+                              } else {
+                                toast('Contact business for services');
+                              }
                             },
                           ),
                         ],
@@ -452,7 +597,6 @@ class _BusinessDescriptionScreenState extends State<BusinessDescriptionScreen> {
                     textColor: white,
                     color: rf_primaryColor,
                     onTap: () {
-                      // ✅ CORRECTED: website
                       if (widget.businessData.website != null) {
                         toast('Opening website');
                       } else {
