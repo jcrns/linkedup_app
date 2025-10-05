@@ -29,12 +29,14 @@ class UserService {
         var jsonResponse = jsonDecode(response.body);
         var token = jsonResponse['token'];
         var profile = jsonResponse['profile'];
+        var user_id = jsonResponse['user_id'].toString();
 
         // Save token and profile
         final prefs = await SharedPreferences.getInstance();
         await prefs.setString('auth_token', token);
         await prefs.setString('profile', json.encode(profile));
-        await prefs.setString('user_id', profile['id'].toString());
+        await prefs.setString('user_id', user_id);
+        print('Login successful, token saved.');
 
         // Save credentials securely
         await _saveCredentials(username, password);
@@ -144,6 +146,7 @@ class UserService {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString('auth_token');
   }
+  
   static Future<int?> getCurrentUserId() async {
     final prefs = await SharedPreferences.getInstance();
     final userId = prefs.getString('user_id');
@@ -169,7 +172,7 @@ class UserService {
         },
       );
 
-      print('My Business API Response Status: ${response.statusCode}');
+      // print('My Business API Response Status: ${response.statusCode}');
 
       if (response.statusCode == 200) {
         final responseBody = json.decode(response.body);
@@ -206,7 +209,7 @@ class UserService {
       if (response.statusCode == 200) {
         final responseBody = json.decode(response.body);
         if (responseBody is List && responseBody.isNotEmpty) {
-          print("Product Response is a list with length: ${responseBody.length}");
+          // print("Product Response is a list with length: ${responseBody.length}");
           return responseBody[0];
         } else if (responseBody is Map<String, dynamic>) {
           print("Product Response is a single object");

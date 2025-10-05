@@ -15,6 +15,7 @@ const rf_hold = "images/roomFinding/rf_hold.png";
 const rf_setting = "images/roomFinding/rf_setting.png";
 const rf_faq = "images/roomFinding/rf_faq.png";
 const rf_person = "images/roomFinding/rf_person.png";
+const rf_cart = "images/payment/cart.png";
 const rf_notification = "images/roomFinding/rf_notification.png";
 const rf_recent_view = "images/roomFinding/rf_recent_view.png";
 const rf_about_us = "images/roomFinding/rf_about_us.png";

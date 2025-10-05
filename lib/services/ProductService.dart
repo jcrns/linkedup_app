@@ -1,6 +1,7 @@
 // services/ProductService.dart
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:room_finder_flutter/models/Models.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ProductService {
@@ -10,6 +11,158 @@ class ProductService {
   static Future<String?> _getAuthToken() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString('auth_token');
+  }
+
+  // Update product
+  Future<bool> updateProduct(Product product) async {
+    final token = await _getAuthToken();
+    if (token == null) {
+      print('No auth token found');
+      return false;
+    }
+
+    try {
+      final url = Uri.parse('${_baseUrl}products/${product.id}/');
+      final response = await http.put(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Token $token',
+        },
+        body: jsonEncode({
+          'name': product.name,
+          'description': product.description,
+          'price': product.price,
+          'stock': product.stock,
+          'category': product.category,
+          'image': product.image,
+        }),
+      );
+
+      print('Update Product Response: ${response.statusCode}');
+      print('Response Body: ${response.body}');
+
+      if (response.statusCode == 200) {
+        return true;
+      } else {
+        print('Failed to update product: ${response.statusCode}');
+        return false;
+      }
+    } catch (e) {
+      print('Error updating product: $e');
+      return false;
+    }
+  }
+
+  // Delete product
+  Future<bool> deleteProduct(int productId) async {
+    final token = await _getAuthToken();
+    if (token == null) {
+      print('No auth token found');
+      return false;
+    }
+
+    try {
+      final url = Uri.parse('${_baseUrl}products/$productId/');
+      final response = await http.delete(
+        url,
+        headers: {
+          'Authorization': 'Token $token',
+        },
+      );
+
+      print('Delete Product Response: ${response.statusCode}');
+
+      if (response.statusCode == 204) {
+        return true;
+      } else {
+        print('Failed to delete product: ${response.statusCode}');
+        return false;
+      }
+    } catch (e) {
+      print('Error deleting product: $e');
+      return false;
+    }
+  }
+
+  // Get products by business ID
+  Future<List<Product>> getProductsByBusinessId(int businessId) async {
+    try {
+      final url = Uri.parse('${_baseUrl}products/?business=$businessId');
+      final response = await http.get(url);
+
+      if (response.statusCode == 200) {
+        final List<dynamic> responseData = jsonDecode(response.body);
+        return responseData.map((json) => Product.fromJson(json)).toList();
+      } else {
+        print('Failed to fetch products: ${response.statusCode}');
+        return [];
+      }
+    } catch (e) {
+      print('Error fetching products: $e');
+      return [];
+    }
+  }
+  
+  // Add to ProductService.dart
+  static Future<Map<String, dynamic>> createProduct(Map<String, dynamic> productData) async {
+    final token = await _getAuthToken();
+    if (token == null) {
+      throw Exception('No auth token found');
+    }
+
+    try {
+      final response = await http.post(
+        Uri.parse('${_baseUrl}products/'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Token $token',
+        },
+        body: json.encode(productData),
+      );
+
+      print('Create Product Response Status: ${response.statusCode}');
+      print('Create Product Response Body: ${response.body}');
+
+      if (response.statusCode == 201) {
+        return json.decode(response.body);
+      } else {
+        final errorBody = json.decode(response.body);
+        throw Exception('Failed to create product: ${errorBody.toString()}');
+      }
+    } catch (e) {
+      print('Error creating product: $e');
+      rethrow;
+    }
+  }
+
+  // Add method to upload product image
+  static Future<String?> uploadProductImage(String imagePath) async {
+    final token = await _getAuthToken();
+    if (token == null) {
+      throw Exception('No auth token found');
+    }
+
+    try {
+      var request = http.MultipartRequest('POST', Uri.parse('${_baseUrl}upload-image/'));
+      request.headers['Authorization'] = 'Token $token';
+      
+      request.files.add(await http.MultipartFile.fromPath('image', imagePath));
+      
+      final response = await request.send();
+      final responseBody = await response.stream.bytesToString();
+      
+      if (response.statusCode == 200) {
+        final jsonResponse = json.decode(responseBody);
+        return jsonResponse['image_url'];
+      } else {
+        throw Exception('Failed to upload image: ${response.reasonPhrase}');
+      }
+    } catch (e) {
+      print('Error uploading product image: $e');
+      rethrow;
+    }
   }
 
   // Update in ProductService.dart
@@ -58,11 +211,11 @@ class ProductService {
   // Add this new method for getting featured products with limit
   static Future<dynamic> getFeaturedProducts({int limit = 4}) async {
     try {
-      final token =_getAuthToken();
       final uri = Uri.parse('${_baseUrl}products/').replace(
         queryParameters: {
           'limit': limit.toString(),
-          'ordering': '-created_at', // Or any other ordering for featured
+          'is_featured': 'true', // Filter by featured products
+          'ordering': '-created_at', // Order by most recent
         },
       );
 
@@ -138,12 +291,16 @@ static Future<dynamic> getRecentProducts({
   static Future<dynamic> getProductsByCategory(String category, {int limit = 20}) async {
     try {
       final token =_getAuthToken();
+      final Map<String, String> queryParams = {
+        'limit': limit.toString(),
+      };
+      
+      if (category != 'All') {
+        queryParams['category'] = category;
+      }
 
       final uri = Uri.parse('${_baseUrl}products/').replace(
-        queryParameters: {
-          'category': category,
-          'limit': limit.toString(),
-        },
+        queryParameters: queryParams,
       );
 
       final response = await http.get(
@@ -242,9 +399,10 @@ static Future<dynamic> getRecentProducts({
     try {
       // This would depend on your business logic - you might need to add a sales_count field
       // final token =_getAuthToken();
+      
       final uri = Uri.parse('${_baseUrl}products/').replace(
         queryParameters: {
-          'ordering': '-stock', // Using stock as proxy for best selling for now
+          'ordering': '-views,-created_at',
           'limit': limit.toString(),
         },
       );

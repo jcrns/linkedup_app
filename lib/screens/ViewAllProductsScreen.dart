@@ -115,7 +115,7 @@ class _ViewAllProductsScreenState extends State<ViewAllProductsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(_getScreenTitle()),
+        title: Text(_getScreenTitle(), style: boldTextStyle(color: Colors.white)),
         backgroundColor: rf_primaryColor,
         elevation: 0,
       ),

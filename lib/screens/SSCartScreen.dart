@@ -144,7 +144,7 @@ class SSCartFragmentState extends State<SSCartFragment> {
             // sSAppButton(
             //   context: context,
             //   onPressed: () {
-            //     SSBillingAddressScreen().launch(context);
+            //     BillingAddressScreen().launch(context);
             //   },
             //   title: 'Checkout',
             // ),

@@ -46,7 +46,7 @@
 		</data>
 		<key>Frameworks/App.framework/App</key>
 		<data>
-		11p7TAw9/bJUzllFa6Vh/sbxHmw=
+		nor9ruYQkYnPdlQLQsLNBv+qxmM=
 		</data>
 		<key>Frameworks/App.framework/Info.plist</key>
 		<data>
@@ -54,15 +54,15 @@
 		</data>
 		<key>Frameworks/App.framework/_CodeSignature/CodeResources</key>
 		<data>
-		AvFrhi4ky+mdN0Buz8j3h7XmusY=
+		uP1g+Zau5dtgAKxarmt/0y/OaLs=
 		</data>
 		<key>Frameworks/App.framework/flutter_assets/AssetManifest.bin</key>
 		<data>
-		U/u8C57guu1Kc2fhsERDvAyH0HY=
+		CPY7/Y/7ZQS/D2dUo0jf45m70cM=
 		</data>
 		<key>Frameworks/App.framework/flutter_assets/AssetManifest.json</key>
 		<data>
-		n4RNHTBc7XB8CPSXdR8aaFANLRE=
+		CyKfOjJda/1SWicutGIssGzEnf4=
 		</data>
 		<key>Frameworks/App.framework/flutter_assets/FontManifest.json</key>
 		<data>
@@ -83,6 +83,22 @@
 		<key>Frameworks/App.framework/flutter_assets/images/app/placeholder.png</key>
 		<data>
 		95PZA3QR1TlpMaVg48gxZq3hKv8=
+		</data>
+		<key>Frameworks/App.framework/flutter_assets/images/payment/bank_transfer.png</key>
+		<data>
+		IUilno1auSC3Ijs91GAkgXubM/Y=
+		</data>
+		<key>Frameworks/App.framework/flutter_assets/images/payment/cart.png</key>
+		<data>
+		dMBy9qI/KqE6WFwDNJaZ4frI4Rs=
+		</data>
+		<key>Frameworks/App.framework/flutter_assets/images/payment/credit_card.png</key>
+		<data>
+		+0vi5wtzGVarcL2CrEn4LI+PmI4=
+		</data>
+		<key>Frameworks/App.framework/flutter_assets/images/payment/paypal.png</key>
+		<data>
+		9LkI4Ko8SdUx5s9zexd1AL/4tNE=
 		</data>
 		<key>Frameworks/App.framework/flutter_assets/images/roomFinding/ComCon-new.png</key>
 		<data>
@@ -330,7 +346,7 @@
 		</data>
 		<key>Frameworks/App.framework/flutter_assets/kernel_blob.bin</key>
 		<data>
-		DpvcIOdAnrX95t/ESm6icTbte8s=
+		wL+9dlrD9NV9Yoondd0jrunE3EE=
 		</data>
 		<key>Frameworks/App.framework/flutter_assets/packages/fluttertoast/assets/toastify.css</key>
 		<data>
@@ -642,7 +658,7 @@
 		</data>
 		<key>Info.plist</key>
 		<data>
-		JMLPj8sV/1M8JXBKfCEg9mDxi2M=
+		HHkFrAMRk+GVjvyG+M/mdpa++Qs=
 		</data>
 		<key>PkgInfo</key>
 		<data>
@@ -733,7 +749,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			KAJg9ZH12rTev6CPIlJjlK9/DlvWgzryRVottso5Cg0=
+			+pBN/1iGd23IZzj6rMm06qvc1E0wmMlvR7un87kpcVQ=
 			</data>
 		</dict>
 		<key>Frameworks/App.framework/Info.plist</key>
@@ -747,21 +763,21 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			sJcM+A9nJbio/OPYYi6/dUx6Z8ADrEoiqS8MoR0QKwg=
+			aOSilrh84w/UEk8s8KPC/2Tfhp3BSawq4ufDiunJAhk=
 			</data>
 		</dict>
 		<key>Frameworks/App.framework/flutter_assets/AssetManifest.bin</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			TPBADInjnh0IhIOM0vfEG+2jKwIjMcH30xsfoMKeAQs=
+			1M/CF8l3qwuMzDk+LtvnFBeG/y87TIEH7SdPMNgxOSI=
 			</data>
 		</dict>
 		<key>Frameworks/App.framework/flutter_assets/AssetManifest.json</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			86k970mL5Uw3Efl8xlfKcjStSKGcaGWC2PT3DsbNY9k=
+			O2YSfZqh/nFozaXEo6qASTL/5qDhrEsq9LUuj8bVvlI=
 			</data>
 		</dict>
 		<key>Frameworks/App.framework/flutter_assets/FontManifest.json</key>
@@ -797,6 +813,34 @@
 			<key>hash2</key>
 			<data>
 			nqZ/J5ayJKNZomVyKxebqkLY90eoHHitDvF543JepNo=
+			</data>
+		</dict>
+		<key>Frameworks/App.framework/flutter_assets/images/payment/bank_transfer.png</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			OqTJtNpnVQrpY0v9sf9xbnZPGenjyg8xIg6hVoyH/VM=
+			</data>
+		</dict>
+		<key>Frameworks/App.framework/flutter_assets/images/payment/cart.png</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			/LAKvVneHTUGQQqKpvXHgWIGBUQBVYQuf9flSYehdeo=
+			</data>
+		</dict>
+		<key>Frameworks/App.framework/flutter_assets/images/payment/credit_card.png</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			oywcDpZbDaKo7lOmcN9Z91EOXRMUBGesBJU4xwpnRrQ=
+			</data>
+		</dict>
+		<key>Frameworks/App.framework/flutter_assets/images/payment/paypal.png</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			CWAHN4TKQ6cy/jDxlTZzr7sJctgYJ4U+4tB+iKtwFEI=
 			</data>
 		</dict>
 		<key>Frameworks/App.framework/flutter_assets/images/roomFinding/ComCon-new.png</key>
@@ -1230,7 +1274,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			UIlPypDOczJa/ML1z1SztageltRczI6itWptyEC9HXw=
+			zTE1BL2zczHLLrfe1AeDxo8kcDEE1weFXiPy8DEk1Kc=
 			</data>
 		</dict>
 		<key>Frameworks/App.framework/flutter_assets/packages/fluttertoast/assets/toastify.css</key>

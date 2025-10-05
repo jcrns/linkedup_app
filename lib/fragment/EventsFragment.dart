@@ -45,8 +45,10 @@ class _EventsFragmentState extends State<EventsFragment> {
       );
 
       if (response.statusCode == 200) {
+        print("Event response.body");
         print(response.body);
         List jsonResponse = jsonDecode(response.body);
+        
         setState(() {
           eventListData = jsonResponse.map((event) => Event.fromJson(event)).toList();
         });

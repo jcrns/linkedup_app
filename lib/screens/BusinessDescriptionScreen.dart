@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:room_finder_flutter/models/Models.dart';
+import 'package:room_finder_flutter/screens/EditBusinessPage.dart';
+import 'package:room_finder_flutter/services/BusinessService.dart';
 import 'package:room_finder_flutter/services/FavoritesService.dart';
 import 'package:room_finder_flutter/services/UserService.dart';
+import 'package:room_finder_flutter/services/ProductService.dart';
 import 'package:room_finder_flutter/utils/RFColors.dart';
 import 'package:room_finder_flutter/utils/RFWidget.dart';
+import 'package:room_finder_flutter/screens/AddProductPage.dart';
 
 class BusinessDescriptionScreen extends StatefulWidget {
   final Business businessData;
@@ -15,10 +19,16 @@ class BusinessDescriptionScreen extends StatefulWidget {
   _BusinessDescriptionScreenState createState() => _BusinessDescriptionScreenState();
 }
 
+// In BusinessDescriptionScreen.dart - Update the _editBusiness method and add state variables
+
 class _BusinessDescriptionScreenState extends State<BusinessDescriptionScreen> {
   bool isFavorite = false;
   bool isOwner = false;
-  int? currentUserId;
+  bool _hasProducts = false;
+  bool _checkingProducts = false;
+  
+  final BusinessService _businessService = BusinessService();
+  final ProductService _productService = ProductService();
 
   @override
   void initState() {
@@ -26,6 +36,43 @@ class _BusinessDescriptionScreenState extends State<BusinessDescriptionScreen> {
     setStatusBarColor(Colors.transparent, statusBarIconBrightness: Brightness.light);
     _checkIfFavorited();
     _checkOwnership();
+    _checkBusinessProducts();
+  }
+
+  Future<void> _checkBusinessProducts() async {
+    if (!isOwner) return;
+    
+    setState(() {
+      _checkingProducts = true;
+    });
+    
+    try {
+      final hasProducts = await _businessService.hasProducts(widget.businessData.id!);
+      setState(() {
+        _hasProducts = hasProducts;
+      });
+    } catch (e) {
+      print('Error checking products: $e');
+    } finally {
+      setState(() {
+        _checkingProducts = false;
+      });
+    }
+  }
+
+  void _editBusiness() {
+    EditBusinessPage(business: widget.businessData).launch(context).then((value) {
+      if (value == true) {
+        // Refresh the screen if business was updated
+        toast('Business updated successfully');
+        setState(() {});
+      }
+    });
+  }
+
+  void _editProduct() {
+    // Navigate to product list or show dialog to select product to edit
+    toast('Navigate to product management');
   }
 
   // In both BusinessDescriptionScreen and ProductDescriptionScreen
@@ -58,6 +105,19 @@ class _BusinessDescriptionScreenState extends State<BusinessDescriptionScreen> {
     }
   }
 
+  // Add this method to the _BusinessDescriptionScreenState class
+  void _addNewProduct() {
+    AddProductPage(business: widget.businessData).launch(context).then((value) {
+      // Refresh the screen if a product was added successfully
+      if (value == true) {
+        // You might want to refresh the products list here
+        toast('Product added successfully!');
+        // Optionally refresh the business data
+        setState(() {});
+      }
+    });
+  }
+
   Future<void> _checkIfFavorited() async {
     final favorited = await FavoritesService.isBusinessFavorited(widget.businessData.id!);
     setState(() {
@@ -76,12 +136,6 @@ class _BusinessDescriptionScreenState extends State<BusinessDescriptionScreen> {
     setState(() {
       isFavorite = !isFavorite;
     });
-  }
-
-  void _editBusiness() {
-    toast('Edit business functionality coming soon');
-    // Navigate to business edit screen
-    // BusinessEditScreen(business: widget.businessData).launch(context);
   }
 
   void _manageProducts() {
@@ -404,10 +458,12 @@ class _BusinessDescriptionScreenState extends State<BusinessDescriptionScreen> {
                                 12.width,
                                 Expanded(
                                   child: AppButton(
-                                    text: 'Edit Products',
+                                    text: _checkingProducts 
+                                    ? 'Loading...' 
+                                    : (_hasProducts ? 'Edit Product' : 'Add Product'),
                                     textColor: Colors.green,
                                     color: Colors.green.withOpacity(0.1),
-                                    onTap: _manageProducts,
+                                    onTap: _addNewProduct,
                                   ),
                                 ),
                               ],
@@ -519,7 +575,7 @@ class _BusinessDescriptionScreenState extends State<BusinessDescriptionScreen> {
                               textColor: white,
                               color: Colors.green,
                               onTap: () {
-                                toast('Add product functionality coming soon');
+                                _addNewProduct();
                               },
                             ),
                           ],
@@ -549,18 +605,6 @@ class _BusinessDescriptionScreenState extends State<BusinessDescriptionScreen> {
                             textAlign: TextAlign.center,
                           ),
                           16.height,
-                          AppButton(
-                            text: isOwner ? 'Add Your First Product' : 'Contact for Services',
-                            textColor: white,
-                            color: rf_primaryColor,
-                            onTap: () {
-                              if (isOwner) {
-                                toast('Add product functionality coming soon');
-                              } else {
-                                toast('Contact business for services');
-                              }
-                            },
-                          ),
                         ],
                       ),
                     ),

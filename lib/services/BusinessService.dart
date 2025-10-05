@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
+import 'package:room_finder_flutter/models/Models.dart';
+import 'package:room_finder_flutter/services/ProductService.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 
@@ -13,6 +15,63 @@ class BusinessService {
     return prefs.getString('auth_token');
   }
   
+  Future<bool> updateBusiness(Business business) async {
+    final token = await _getAuthToken();
+    if (token == null) {
+      print('No auth token found');
+      return false;
+    }
+
+    try {
+      final url = Uri.parse('${_baseUrl}businesses/${business.id}/');
+      final response = await http.put(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Token $token',
+        },
+        body: jsonEncode({
+          'name': business.name,
+          'description': business.description,
+          'business_type': business.businessType,
+          'location': business.location,
+          'address': business.address,
+          'contact_info': business.contactInfo,
+          'website': business.website,
+          'business_hours': business.businessHours,
+          'target_audience': business.targetAudience,
+          'social_media': business.socialMedia,
+          'deals': business.deals,
+        }),
+      );
+
+      print('Update Business Response: ${response.statusCode}');
+      print('Response Body: ${response.body}');
+
+      if (response.statusCode == 200) {
+        return true;
+      } else {
+        print('Failed to update business: ${response.statusCode}');
+        return false;
+      }
+    } catch (e) {
+      print('Error updating business: $e');
+      return false;
+    }
+  }
+
+  // Check if business has products
+  Future<bool> hasProducts(int businessId) async {
+    try {
+      final products = await ProductService().getProductsByBusinessId(businessId);
+      return products.isNotEmpty;
+    } catch (e) {
+      print('Error checking products: $e');
+      return false;
+    }
+  }
+
+
   static Future<Map<String, dynamic>?> getUserBusiness() async {
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('auth_token');
@@ -298,35 +357,6 @@ class BusinessService {
     }
   }
 
-  // 9. Update business
-  static Future<Map<String, dynamic>?> updateBusiness(int businessId, Map<String, dynamic> businessData) async {
-    final token = await _getAuthToken();
-    if (token == null) {
-      throw Exception('No auth token found');
-    }
-
-    try {
-      final response = await http.patch(
-        Uri.parse('${_baseUrl}businesses/$businessId/'),
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-          'Authorization': 'Token $token',
-        },
-        body: json.encode(businessData),
-      );
-
-      if (response.statusCode == 200) {
-        return json.decode(response.body);
-      } else {
-        final errorBody = json.decode(response.body);
-        throw Exception('Failed to update business: ${errorBody.toString()}');
-      }
-    } catch (e) {
-      print('Error updating business: $e');
-      rethrow;
-    }
-  }
 
   // 10. Delete business
   static Future<bool> deleteBusiness(int businessId) async {

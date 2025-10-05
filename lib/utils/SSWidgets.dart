@@ -10,17 +10,23 @@ sSAppButton({
   Color? color,
   Color? textColor,
 }) {
-  return AppButton(
-    shapeBorder: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24), side: BorderSide(color: Color(0xff808080), width: 1)),
-    text: title,
-    color: color ?? Color(0xff000000),
-    textColor: textColor ?? Color(0xfffffbfb),
-    onTap: () {
-      onPressed!();
-    },
+  return SizedBox(
     width: context.width(),
+    child: ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: color ?? Color(0xff000000),
+        foregroundColor: textColor ?? Color(0xfffffbfb),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(24),
+          side: BorderSide(color: Color(0xff808080), width: 1),
+        ),
+      ),
+      onPressed: () => onPressed?.call(),
+      child: Text(title ?? ""),
+    ),
   );
 }
+
 
 InputDecoration sSInputDecoration({String? name, BuildContext? context, Widget? icon}) {
   return InputDecoration(

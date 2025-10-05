@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:room_finder_flutter/models/Models.dart';
+import 'package:room_finder_flutter/screens/CheckoutScreen.dart';
+import 'package:room_finder_flutter/screens/EditProductPage.dart';
+import 'package:room_finder_flutter/services/CartService.dart';
 import 'package:room_finder_flutter/services/FavoritesService.dart';
 import 'package:room_finder_flutter/services/UserService.dart';
 import 'package:room_finder_flutter/utils/RFColors.dart';
@@ -73,10 +76,15 @@ class _ProductDescriptionScreenState extends State<ProductDescriptionScreen> {
   }
 
   void _editProduct() {
-    toast('Edit product functionality coming soon');
-    // Navigate to product edit screen
-    // ProductEditScreen(product: widget.product).launch(context);
+    EditProductPage(product: widget.product).launch(context).then((value) {
+      if (value == true) {
+        // Refresh the screen if product was updated or deleted
+        toast('Product updated successfully');
+        Navigator.pop(context, true); // Return to previous screen with refresh
+      }
+    });
   }
+
 
   void _manageInventory() {
     toast('Inventory management coming soon');
@@ -334,7 +342,7 @@ class _ProductDescriptionScreenState extends State<ProductDescriptionScreen> {
                               _buildInfoRow('Category', widget.product.category ?? 'Not specified'),
                               _buildInfoRow('Stock', '${widget.product.stock} available'),
                               _buildInfoRow('Business', widget.product.business?.name ?? 'Unknown'),
-                              _buildInfoRow('Added', _formatDate(widget.product.created_at)),
+                              // _buildInfoRow('Added', _formatDate(widget.product.created_at)),
                             ],
                           ),
                         ),
@@ -382,43 +390,58 @@ class _ProductDescriptionScreenState extends State<ProductDescriptionScreen> {
       ),
 
       // Bottom action bar
-      bottomNavigationBar: Container(
-        padding: EdgeInsets.all(16),
-        decoration: boxDecorationWithRoundedCorners(
-          backgroundColor: context.scaffoldBackgroundColor,
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(16),
-            topRight: Radius.circular(16),
-          ),
-          border: Border.all(color: context.dividerColor),
+      // Bottom action bar
+    bottomNavigationBar: Container(
+      padding: EdgeInsets.all(16),
+      decoration: boxDecorationWithRoundedCorners(
+        backgroundColor: context.scaffoldBackgroundColor,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(16),
+          topRight: Radius.circular(16),
         ),
-        child: SafeArea(
-          child: Row(
-            children: [
-              if (!isOwner) // Only show cart for non-owners
-                Container(
-                  decoration: boxDecorationWithRoundedCorners(
-                    backgroundColor: context.cardColor,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: IconButton(
-                    icon: Icon(Icons.shopping_cart_outlined, color: rf_primaryColor),
-                    onPressed: () {
-                      toast('Add to cart feature coming soon');
-                    },
-                  ),
+        border: Border.all(color: context.dividerColor),
+      ),
+      child: SafeArea(
+        child: Row(
+          children: [
+            if (!isOwner) // Only show cart for non-owners
+              Container(
+                decoration: boxDecorationWithRoundedCorners(
+                  backgroundColor: context.cardColor,
+                  borderRadius: BorderRadius.circular(12),
                 ),
-              if (!isOwner) 12.width,
+                child: IconButton(
+                  icon: Badge(
+                    label: FutureBuilder<int>(
+                      future: CartService.getCartItemCount(),
+                      builder: (context, snapshot) {
+                        final count = snapshot.data ?? 0;
+                        return Text(count.toString());
+                      },
+                    ),
+                    child: Icon(Icons.shopping_cart_outlined, color: rf_primaryColor),
+                  ),
+                  onPressed: () {
+                    CheckoutScreen(onGoExplore: () {}).launch(context);
+                  },
+                ),
+              ),
+            if (!isOwner) 12.width,
               Expanded(
                 child: AppButton(
-                  text: isOwner ? 'Manage Product' : 'Buy Now',
+                  text: isOwner ? 'Manage Product' : 'Add to Cart',
                   textColor: white,
                   color: rf_primaryColor,
-                  onTap: () {
+                  onTap: () async {
                     if (isOwner) {
                       _editProduct();
                     } else {
-                      toast('Purchase feature coming soon');
+                      try {
+                        await CartService.addToCart(widget.product);
+                        toast('Added to cart successfully!');
+                      } catch (e) {
+                        toast('Error adding to cart: $e');
+                      }
                     }
                   },
                 ),
